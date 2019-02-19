@@ -1,15 +1,26 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 
 // switch to lower case because word list is lower case
 #define ALPHABET_SIZE 26
 #define OFFSET 97
 #define WORDLIST "./words/words_3_9.txt"
-#define MAXLEN 10
+#define MAXLEN 20
 #define NEWLINE '\n'
 #define ROW 4
 typedef enum {false, true} bool;
+
+static void catch_handler(int signo) {
+  if (signo == SIGINT) {
+    printf("\nCaught SIGINT exiting...\n");
+    exit(EXIT_SUCCESS);
+  } else if (signo == SIGSEGV) {
+    printf("\nMemory error...\n");
+    exit(EXIT_FAILURE);
+  }
+}
 
 typedef struct Trie_t Trie_t;
 typedef struct Trie_t {
@@ -85,7 +96,7 @@ char * readline(FILE *file) {
     c = fgetc(file);
     line[i] = c;
     i++;
-  } while (c != NEWLINE && c != 0);
+  } while (c != NEWLINE && c != 0 && c != EOF);
   line[i-1] = 0;
   size_t size = sizeof(char)*i;
   line = realloc(line,size);
@@ -189,14 +200,14 @@ void set_visited(unsigned int *v,int x,int y,bool visited) {
   if (visited == true) {
     *v = *v | n;
   } else {
-    *v = ~(~*v | n);
+    *v = *v & ~n;
   }
 }
 
 bool has_visited(unsigned int *v,int x,int y) {
   int i = y*ROW+x;
-  unsigned int c = 1;
-  unsigned int r = (c << i) & *v;
+  unsigned int c = 1 << i;
+  unsigned int r = c & *v;
   bool visited = false;
   if (r == c) {
     visited = true;
@@ -205,15 +216,23 @@ bool has_visited(unsigned int *v,int x,int y) {
 }
 
 Wordlist_t * new_wordlist(char *word) {
-  Wordlist_t *wordlist = malloc(sizeof(Wordlist_t));
+  Wordlist_t *wordlist = NULL;
+  wordlist = malloc(sizeof(Wordlist_t));
   wordlist->word = word;
+  wordlist->next = NULL;
   return wordlist;
 }
 
-Wordlist_t * add_word(Wordlist_t *wordlist,char *word) {
+void add_word(Wordlist_t *head,char *word) {
   Wordlist_t *new_word = new_wordlist(word);
-  wordlist->next = new_word;
-  return new_word;
+  Wordlist_t *node = head;
+  while (node->next != NULL) {
+    node = node->next;
+    if (strcmp(node->word,word) == 0) {
+      return;
+    }
+  }
+  node->next = new_word;
 }
 
 // Wordlist_t * new_wordlist() {
@@ -289,8 +308,8 @@ void find_words(Trie_t *node,char **board,Wordlist_t *wordlist,char *stack,unsig
     size_t size = strlen(stack);
     char *word = malloc(sizeof(char)*size);
     strcpy(word,stack);
-    printf("%s\n",word);
-    wordlist = add_word(wordlist,word);
+    //printf("%s\n",word);
+    add_word(wordlist,word);
   }
   for (int dx=-1;dx<=1;dx++) {
     int x = ox+dx;
@@ -310,50 +329,91 @@ void find_words(Trie_t *node,char **board,Wordlist_t *wordlist,char *stack,unsig
 
 
 int main(int argc,char **argv) {
-  printf("Loading wordlist\n");
-  FILE *file = fopen(WORDLIST,"r");
+  signal(SIGINT,catch_handler);
+  signal(SIGSEGV,catch_handler);
+  char* wordlist = NULL;
+  bool debug = false;
+  bool verboose = false;
+  int minlen = 0;
+  for (int i=1;i<argc;i++) {
+    char *arg = argv[i];
+    if (strcmp(arg,"-d") == 0 || strcmp(arg,"--debug") == 0) {
+      debug = true;
+    } else if (strcmp(arg,"-v") == 0 || strcmp(arg,"--verboose") == 0) {
+      verboose = true;
+    } else if (strcmp(arg,"-m") == 0 || strcmp(arg,"--min-len") == 0) {
+      if (i+1 < argc) {
+        i++;
+        minlen = atoi(argv[i]);
+      }
+    } else if (strcmp(arg,"-h") == 0 || strcmp(arg,"--help") == 0) {
+      printf("Usage: %s [-h] [-v] [-d] [-m n] ...wordlist\n\n  -h, --help = Print this help message\n  -v, --verboose = Run in verboose mode\n  -d, --debug = Run in debug mode\n  -m [n],--min-len [n] = set the min length for words to be found to [n]\n  wordlist = file to load wordlist from\n\n",argv[0]);
+      return 0;
+    } else {
+      wordlist = arg;
+    }
+  }
+  if (wordlist == NULL) {
+    wordlist = WORDLIST;
+  }
+  printf("Loading wordlist: %s\n",wordlist);
+  FILE *file = fopen(wordlist,"r");
   Trie_t *head = parse_wordlist(file);
   fclose(file);
-  bool ass = head->children['a'-OFFSET]->children['s'-OFFSET]->children['s'-OFFSET]->end;
-  if (ass == true) {
-    printf("Ass\n");
-  } else {
-    printf("No ass\n");
+  if (debug == true) {
+    bool ass = head->children['a'-OFFSET]->children['s'-OFFSET]->children['s'-OFFSET]->end;
+    if (ass == true) {
+      printf("Ass\n");
+    } else {
+      printf("No ass\n");
+    }
   }
   printf("Loading done\n");
   //  print_trie(head,0,4);
   size_t size = sizeof(char*)*ROW*ROW;
-  printf("Board size: %d\n",size);
+  if (verboose == true || debug == true) {
+    printf("Board size: %d\n",size);
+  }
   char **board = malloc(size);
   for (int y=0;y<ROW;y++) {
     for (int x=0;x<ROW;x++) {
-      printf("Pos (%d,%d): ",x,y);
+      printf("Pos (%d,%d): ",x+1,y+1);
       char *pos = get_pos(10);
       int loc = (y*ROW)+x;
       board[loc] = pos;
     }
   }
   print_board(board);
-  Wordlist_t *head = new_wordlist("");
-  Wordlist_t *wordlist = head;
+  Wordlist_t *w_head = new_wordlist("");
   for (int y=0;y<ROW;y++) {
     for (int x=0;x<ROW;x++) {
-      unsigned int visited = 0;
+      unsigned int *visited = malloc(sizeof(unsigned int));
+      *visited = 0;
       //Charstack_t *stack = new_charstack();
       char stack[ROW*ROW];
       stack[0] = 0;
-      find_words(head,board,wordlist,stack,&visited,x,y);
+      find_words(head,board,w_head,stack,visited,x,y);
     }
   }
-  printf("Words\n");
-  Wordlist_t *node = head;
-  do {
+  printf("Words:\n");
+  Wordlist_t *node = w_head->next;
+  unsigned int w_count = 0;
+  while (node != NULL) {
+    if (minlen > 0) {
+      if (strlen(node->word) >= minlen) {
+        printf("%s\n",node->word);
+        w_count++;
+      }
+    } else {
+      printf("%s\n",node->word);
+      w_count++;
+    }
     node = node->next;
-    printf("%s\n",node->word);
-  } while (node->next != NULL);
+  }
+  printf("Found %d words\n",w_count);
   //printf("Found %d words\n",wordlist->size);
   // for (int i=0;i<wordlist->size;i++) {
   //   printf("%s\n",wordlist->words[i]);
   // }
-  return 0;
+  return EXIT_SUCCESS;
 }
