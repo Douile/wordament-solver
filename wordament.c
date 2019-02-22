@@ -56,7 +56,6 @@ void parse_args(int argc,char **argv) {
     }
   }
   if (wordlist != NULL) {
-    free(WORDLIST);
     WORDLIST = wordlist;
   }
 }
@@ -159,7 +158,12 @@ char * readline(FILE *file) {
   } while (c != NEWLINE && c != 0 && c != EOF);
   line[i-1] = 0;
   size_t size = sizeof(char)*i;
-  line = realloc(line,size);
+  if (i-2 < MIN_LENGTH) {
+    free(line);
+    line = NULL;
+  } else {
+    line = realloc(line,size);
+  }
   return line;
 }
 
@@ -171,10 +175,8 @@ Trie_t * parse_wordlist(FILE *wordlist) {
   Trie_t *head = new_trie('*',false);
   while (ftell(wordlist) < size) {
     char *word = readline(wordlist);
+    if (word == NULL) continue;
     //sprintf(word,"%s",word);
-    if (strlen(word) < 1) {
-      continue;
-    }
     // printf("%s",word);
     // fseek(stdout,-1*strlen(word),SEEK_CUR);
     // printf("%s\n",word);
@@ -473,13 +475,9 @@ void find_words(Trie_t *node,char **board,int *point_board,Wordlist_t *wordlist,
       }
     }
     word_s[x] = 0;
-    if (x > MIN_LENGTH) {
-      if (VERBOOSE == true || DEBUG == true) printf("Found word: %s\n",word_s);
-      Word_t *word = new_word(word_s,points);
-      add_word(wordlist,word);
-    } else {
-      free(word_s);
-    }
+    if (VERBOOSE == true || DEBUG == true) printf("Found word: %s\n",word_s);
+    Word_t *word = new_word(word_s,points);
+    add_word(wordlist,word);
   }
   for (int dx=-1;dx<=1;dx++) {
     int x = ox+dx;
