@@ -81,9 +81,9 @@ int main(int argc,char **argv) {
   if (DEBUG == true) {
     bool ass = head->children['a'-OFFSET]->children['s'-OFFSET]->children['s'-OFFSET]->end;
     if (ass == true) {
-      printf("Ass\n");
+      printf("Dictionary test success\n");
     } else {
-      printf("No ass\n");
+      printf("Dictionary test error\n");
     }
   }
   printf("Loading done\n");
@@ -107,7 +107,7 @@ int main(int argc,char **argv) {
     for (int y=0;y<ROW;y++) {
       for (int x=0;x<ROW;x++) {
         int pos = y*ROW+x;
-        printf("Checking (%d,%d)\n",x,y);
+        printf("[board] Checking (%d,%d)\n",x,y);
         int size = strlen(board[pos]);
         char *copy = malloc(sizeof(char)*(size+1));
         strcpy(copy,board[pos]);
@@ -168,8 +168,8 @@ void parse_args(int argc,char **argv) {
 }
 
 char * float_string(float n) {
-  char *text = malloc(sizeof(char)*10);
-  sprintf(text,"%F",n);
+  char *text = malloc(sizeof(char)*20);
+  sprintf(text,"%f",n);
   int len = strlen(text);
   for (int i=1;i<=len;i++) {
     int x = len-i;
@@ -184,6 +184,7 @@ char * float_string(float n) {
   }
   int n_len = strlen(text)+1;
   text = realloc(text,sizeof(char)*n_len);
+  if (DEBUG == true) printf("[fstring] %f -> %s\n",n,text);
   return text;
 }
 
@@ -314,7 +315,7 @@ void print_board(char **board) {
       maxlen = l;
     }
   }
-  if (DEBUG == true || VERBOOSE == true) printf("Max tile length: %d\n",maxlen);
+  if (DEBUG == true || VERBOOSE == true) printf("[trie] Max tile length: %d\n",maxlen);
   int row_size = sizeof(char)*((ROW*(maxlen+1))+1);
   for (int y=0;y<ROW;y++) {
     char *row = malloc(row_size);
@@ -393,11 +394,11 @@ void add_word(Wordlist_t *head,Word_t *word) {
   }
   if (node->next == NULL) {
     node->next = new_word;
-    if (DEBUG == true) printf("Appended word %s\n",new_word->word->word);
+    if (DEBUG == true) printf("[wlist] Appended word %s\n",new_word->word->word);
   } else {
     new_word->next = node->next;;
     node->next = new_word;
-    if (DEBUG == true) printf("Inserted word %s\n",new_word->word->word);
+    if (DEBUG == true) printf("[wlist] Inserted word %s\n",new_word->word->word);
   }
 }
 
