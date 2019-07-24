@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Build function
+# $1:Source files $2:Output file
+build() {
+	echo "Building $2";
+	gcc -g -o $1 $2;
+}
+
 # Debug function
 # $1:Debugger, $2: executable
 debug() {
@@ -8,17 +15,14 @@ debug() {
 }
 
 
-if [ $# -gt 0 ]
-then
-  file=$1
+if [ $# -gt 0 ]; then
+  files=$1;
 else
-  file="wordament.c"
+  files="./src/board.c ./src/flags.c ./src/stack.c ./src/trie.c ./src/util.c ./src/wordament.c ./src/wordlist.c";
 fi
-out=${file:0:-2}
+out="wordament"
 
-echo "Building $file ..."
-
-if gcc -g -o $out $file; then
+if build $out "$files"; then
   echo 'Compiled successfully...';
 	debug 'gdb' $out;
 else
