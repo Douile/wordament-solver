@@ -1,8 +1,10 @@
 # wordament-solver
 Solves wordament puzzles using a Trie search (WIP).
 
+_This an attempt to use lib [curses](https://en.wikipedia.org/wiki/Curses_%28programming\_library%29) to provide better usability_
+
 ## Usage
-Compile using `gcc -o wordament wordament.c` (**warning**: compiled binary must be run with relative file `./words/words_3_9.txt` accessible)
+Compile using `gcc -o wordament wordament.c` (**warning**: compiled binary must be run with relative file `./words/words_3\_9.txt` accessible)
 
 ### Additional scripts
 On linux you can compile and immediately run for debugging in gdb using `./build.sh`
