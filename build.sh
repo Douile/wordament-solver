@@ -18,7 +18,7 @@ out=${file:0:-2}
 
 echo "Building $file ..."
 
-if gcc -o $out $file; then
+if gcc -g -o $out $file; then
   echo 'Compiled successfully...';
 	debug 'gdb' $out;
 else
