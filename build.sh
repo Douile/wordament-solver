@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Debug function
+# $1:Debugger, $2: executable
+debug() {
+	echo "Debugging $2";
+	$1 -ex "run" $2;
+}
+
+
 if [ $# -gt 0 ]
 then
   file=$1
@@ -10,13 +18,9 @@ out=${file:0:-2}
 
 echo "Building $file ..."
 
-exec 5>&1
-CC=$(gcc -o $out $file)
-echo $CC
-if [[ $CC = *"error"* ]] # this error check is not currently working
-then
-  echo "Error building, execution cancelled"
+if gcc -o $out $file; then
+  echo 'Compiled successfully...';
+	debug 'gdb' $out;
 else
-  echo "Successful build, starting in debugger"
-  gdb -ex "run" $out
+	echo 'Compile error, exiting...';
 fi
