@@ -2,3 +2,6 @@
 # Compiled executables
 wordament
 wordament.exe
+
+# Debug log
+debug.log

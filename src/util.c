@@ -5,8 +5,8 @@ void parse_args(int argc,char **argv) {
   for (int i=1;i<argc;i++) {
     char *arg = argv[i];
     if (strcmp(arg,"-d") == 0 || strcmp(arg,"--debug") == 0) {
-      DEBUG = true;
-      printf("Debug mode enabled...\n");
+      // DEBUG = true;
+      // printf("Debug mode enabled...\n");
     } else if (strcmp(arg,"-v") == 0 || strcmp(arg,"--verboose") == 0) {
       VERBOOSE = true;
       printf("Verboose mode enabled...\n");
@@ -104,7 +104,8 @@ Trie_t * parse_wordlist(FILE *wordlist) {
   size_t size = ftell(wordlist);
   fseek(wordlist,0L,SEEK_SET);
   Trie_t *head = new_trie('*',false);
-  while (ftell(wordlist) < size) {
+	int pos = ftell(wordlist), i = 0;
+  while (pos < size) {
     char *word = readline(wordlist);
     if (word == NULL) continue;
     Trie_t *node = head;
@@ -113,11 +114,25 @@ Trie_t * parse_wordlist(FILE *wordlist) {
       int x = c-OFFSET;
       if (x >= 0 && x <= ALPHABET_SIZE) {
         node = add_trie(node,c,false);
+        #if DEBUG
+        // char buf[64];
+        // sprintf(buf, "Created Node[%p] %c", node, node->letter);
+        // log_tf(buf);
+        #endif
       }
     }
     node->end = true;
+		pos = ftell(wordlist);
+		if (pos / 1000 > i) {
+			sprintf(status_wordlist, "Parsing %s :: %d/%d", WORDLIST, pos, size);
+			move(0,0);
+			clrtoeol();
+			insstr(status_wordlist);
+			refresh();
+			i = pos / 1000;
+		}
   }
-  printf("\n");
+  //printf("\n");
   return head;
 }
 
@@ -132,4 +147,19 @@ void debug_string(const char *chars) {
     }
   }
   printf("  <-- Length: %d\n",i);
+}
+
+void pad_string(char * string, int length) {
+	int l = strlen(string);
+	while (l < length) {
+		string[l] = ' ';
+		l++;
+	}
+	string[l] = 0;
+}
+
+bool test_trie(Trie_t *head) {
+  /* Test trie contains the word test (not very safe)*/
+  if (head->end) return false;
+  return head->children['t'-OFFSET]->children['e'-OFFSET]->children['s'-OFFSET]->children['t'-OFFSET]->end;
 }

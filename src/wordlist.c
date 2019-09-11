@@ -43,3 +43,13 @@ void add_word(Wordlist_t *head,Word_t *word) {
     if (DEBUG == true) printf("[wlist] Inserted word %s\n",new_word->word->word);
   }
 }
+
+size_t wordlist_size(Wordlist_t *wordlist) {
+  size_t size = 0;
+  Wordlist_t *node = wordlist;
+  while (node->next != NULL) {
+    size += 1;
+    node = node->next;
+  }
+  return size;
+}

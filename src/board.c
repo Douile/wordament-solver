@@ -2,6 +2,23 @@
 
 const unsigned short POINTS[ALPHABET_SIZE] = {2,5,3,3,1,5,4,4,2,10,6,3,4,2,2,4,10,2,2,2,4,6,6,9,5,8};
 
+size_t alloc_board(char **board, int pos_len) {
+	size_t pos_size = sizeof(char)*(pos_len+1);
+
+	for (int i=0;i<POSITIONS;i++) {
+		char *temp = malloc(pos_size);
+		temp[0] = 0;
+		// memset(temp, '\0', pos_size);
+		board[i] = temp;
+	}
+	return pos_size*POSITIONS;
+}
+
+void pos_board(char **board, char *output, int y, int x) {
+	int ipos = (ROW*y) + x;
+	strcpy(output, board[ipos]);
+}
+
 void print_board(char **board) {
   int maxlen=0;
   for (int i=0;i<POSITIONS;i++) {
@@ -49,4 +66,23 @@ int calc_points(const char *pos) {
   // multiple chars (doubles) haven't been properly analysed to find a correct way to score them
   // for now *len (2) will do but most of the time is an over-estimate
   return points;
+}
+
+void calc_point_board(const char **board, int *point_board) {
+	for (int p=0;p<ROW*ROW;p++) {
+		char *position = board[p];
+		int points = calc_points(position);
+		point_board[p] = points;
+	}
+}
+
+bool valid_board(const char **board) {
+	for (int pos=0;pos<ROW*ROW;pos++) {
+		if (strlen(board[pos]) < 1) return false;
+		/* TODO: Add more checks
+		*		- Amount of special characters (-, /)
+		*		- Maximum length
+		*/
+	}
+	return true;
 }
