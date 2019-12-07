@@ -8,5 +8,4 @@ wordament.exe
 *.cache/
 compile
 depcomp
-install-sh
 missing
