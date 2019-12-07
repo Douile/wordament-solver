@@ -6,6 +6,3 @@ wordament.exe
 # Automake
 *.m4
 *.cache/
-compile
-depcomp
-missing
