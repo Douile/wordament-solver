@@ -1,3 +1,3 @@
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign subdir-objects
 bin_PROGRAMS = wordament
-wordament_SOURCES = wordament.c board.c flags.c stack.c trie.c util.c wordlist.c
+wordament_SOURCES = src/wordament.c src/board.c src/flags.c src/stack.c src/trie.c src/util.c src/wordlist.c
