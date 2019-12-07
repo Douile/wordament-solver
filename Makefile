@@ -18,12 +18,12 @@ INCLUDES = ./src/
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS =
+# LFLAGS =
 
 # define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname
 #   option, something like (this will link in libmylib.so and libm.so:
-LIBS =
+# LIBS =
 
 # define the C source files
 SRCS = ./src/wordament.c ./src/board.c ./src/flags.c ./src/stack.c ./src/trie.c ./src/util.c ./src/wordlist.c
@@ -50,10 +50,10 @@ MAIN = wordament
 .PHONY: depend clean
 
 all:    $(MAIN)
-        @echo  Simple compiler named mycc has been compiled
+        @echo Compile complete
 
 $(MAIN): $(OBJS)
-        $(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
+        $(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS)
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
