@@ -5,8 +5,8 @@
 
 void parse_args(int argc,char **argv);
 char * float_string(float n);
-char * readline(FILE *file);
+char * readline(char *wordlist, int *pos);
 char * get_pos(int maxlen);
-Trie_t * parse_wordlist(FILE *wordlist);
+Trie_t * parse_wordlist(char *wordlist);
 void debug_string(const char *chars);
 #endif

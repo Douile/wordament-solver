@@ -46,3 +46,12 @@ void print_trie(Trie_t *node,int depth,int max_depth) {
   }
   printf("%s\n",output);
 }
+
+void free_trie(Trie_t *parent) {
+  for (int i=0;i<ALPHABET_SIZE;i++) {
+    if (parent->children[i] != NULL) {
+      free_trie(parent->children[i]);
+    }
+  }
+  free(parent);
+}

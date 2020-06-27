@@ -49,14 +49,13 @@ char * float_string(float n) {
   return text;
 }
 
-char * readline(FILE *file) {
+char * readline(char *wordlist, int *pos) {
   int i = 0;
   char *line = malloc(sizeof(char)*MAXLEN);
   char c;
   do {
-    c = fgetc(file);
-    line[i] = c;
-    i++;
+    c = wordlist[(*pos)++];
+    line[i++] = c;
   } while (c != NEWLINE && c != 0 && c != EOF);
   line[i-1] = 0;
   size_t size = sizeof(char)*i;
@@ -98,14 +97,12 @@ char * get_pos(int maxlen) {
   return pos;
 }
 
-Trie_t * parse_wordlist(FILE *wordlist) {
-  size_t output_pos = ftell(stdout);
-  fseek(wordlist,0L,SEEK_END);
-  size_t size = ftell(wordlist);
-  fseek(wordlist,0L,SEEK_SET);
+Trie_t * parse_wordlist(char *wordlist) {
+  size_t size = strlen(wordlist);
+  int pos = 0;
   Trie_t *head = new_trie('*',false);
-  while (ftell(wordlist) < size) {
-    char *word = readline(wordlist);
+  while (pos < size) {
+    char *word = readline(wordlist, &pos);
     if (word == NULL) continue;
     Trie_t *node = head;
     for (int i=0;i<strlen(word);i++) {
@@ -116,8 +113,8 @@ Trie_t * parse_wordlist(FILE *wordlist) {
       }
     }
     node->end = true;
+    free(word);
   }
-  printf("\n");
   return head;
 }
 

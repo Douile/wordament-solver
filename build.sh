@@ -4,7 +4,7 @@
 # $1:Source files $2:Output file
 build() {
 	echo "Building $2";
-	gcc -g -o $1 $2;
+	emcc -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS="['cwrap']" -s ALLOW_MEMORY_GROWTH=1 -o $1 $2;
 }
 
 # Debug function
@@ -18,13 +18,12 @@ debug() {
 if [ $# -gt 0 ]; then
   files=$1;
 else
-  files="./src/board.c ./src/flags.c ./src/stack.c ./src/trie.c ./src/util.c ./src/wordament.c ./src/wordlist.c";
+  files="./src/board.c ./src/flags.c ./src/stack.c ./src/trie.c ./src/util.c ./src/wordament.c ./src/wordlist.c ./src/web.c";
 fi
-out="wordament"
+out="./www/wordament.js"
 
 if build $out "$files"; then
   echo 'Compiled successfully...';
-	debug 'gdb' $out;
 else
 	echo 'Compile error, exiting...';
 fi

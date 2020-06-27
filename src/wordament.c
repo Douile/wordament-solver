@@ -15,6 +15,7 @@ static void catch_handler(int signo) {
   }
 }
 
+/*
 int main(int argc,char **argv) {
   signal(SIGINT,catch_handler);
   signal(SIGSEGV,catch_handler);
@@ -83,6 +84,7 @@ int main(int argc,char **argv) {
   printf("Found %d words\n",w_count);
   return EXIT_SUCCESS;
 }
+*/
 
 void find_words(Trie_t *node,char **board,int *point_board,Wordlist_t *wordlist,unsigned int *stack,int ox,int oy) {
   if (stack_includes(stack,ox,oy) == true) return;

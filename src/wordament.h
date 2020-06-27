@@ -14,6 +14,7 @@ typedef enum {false, true} bool;
 #define NEWLINE '\n'
 #define ROW 4
 #define POSITIONS ROW*ROW
+#define VERSION 1
 
 extern bool DEBUG;
 extern bool VERBOOSE;

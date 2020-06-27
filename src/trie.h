@@ -17,5 +17,6 @@ typedef struct Trie_t {
 Trie_t * new_trie(char letter,bool end);
 Trie_t * add_trie(Trie_t *parent,char letter,bool end);
 void print_trie(Trie_t *node,int depth,int max_depth);
+void free_trie(Trie_t *parent);
 
 #endif
