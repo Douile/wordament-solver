@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <signal.h>
 
 typedef enum {false, true} bool;
 
@@ -20,11 +19,6 @@ extern bool DEBUG;
 extern bool VERBOOSE;
 extern char * WORDLIST;
 extern int MIN_LENGTH;
-// argv globals
-// bool DEBUG = false;
-// bool VERBOOSE = false;
-// char * WORDLIST = "./words/words_3_9.txt";
-// int MIN_LENGTH = 0;
 
 #include "trie.h"
 #include "wordlist.h"
