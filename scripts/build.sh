@@ -12,7 +12,7 @@ if [ $# -gt 0 ]; then
 else
   files="./src/board.c ./src/flags.c ./src/stack.c ./src/trie.c ./src/util.c ./src/wordament.c ./src/wordlist.c ./src/web.c";
 fi
-out="./www/wordament.js"
+out="./www/src/wordament.js"
 
 if build $out "$files"; then
   echo 'Compiled successfully...';

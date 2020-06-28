@@ -1,6 +1,9 @@
+# Logs
 debug.log
+
+# Build output
 wordament
 wordament.exe
 
-www/wordament.js
-www/wordament.wasm
+wordament.js
+wordament.wasm
