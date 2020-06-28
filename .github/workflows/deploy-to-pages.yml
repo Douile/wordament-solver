@@ -13,7 +13,7 @@ jobs:
         with:
           persist-credentials: false
 
-      -name: Install dependencies
+      - name: Install dependencies
         run: sudo apt-get install emscripten python2.7 cmake
 
       - name: Build
