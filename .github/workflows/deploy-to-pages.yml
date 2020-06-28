@@ -14,7 +14,11 @@ jobs:
           persist-credentials: false
 
       - name: Install dependencies
-        run: sudo apt-get install emscripten python2.7 cmake
+        run:
+          sudo apt-get install emscripten python2.7 cmake
+          source /etc/profile.d/binaryen.sh
+          source /etc/profile.d/emscripten.sh
+          emcc -v
 
       - name: Build
         run: scripts/build.sh
