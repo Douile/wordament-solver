@@ -8,6 +8,7 @@ int STATE = 0;
 Trie_t * ACTIVE_WORDLIST;
 char ** ACTIVE_BOARD;
 int * ACTIVE_POINTS;
+Wordlist_t *ACTIVE_OUTPUT;
 
 EMSCRIPTEN_KEEPALIVE
 int version() {
@@ -80,15 +81,20 @@ Wordlist_t * search() {
     printf("Must load a wordlist and board before searching\n");
     return NULL;
   }
-  Wordlist_t *w_head = new_wordlist(NULL);
+
+  if (ACTIVE_OUTPUT != NULL) {
+    free_wordlist(ACTIVE_OUTPUT);
+  }
+
+  ACTIVE_OUTPUT = new_wordlist(NULL);
   for (int y=0;y<ROW;y++) {
     for (int x=0;x<ROW;x++) {
       unsigned int stack[POSITIONS+1];
       stack[0] = 0;
-      find_words(ACTIVE_WORDLIST,ACTIVE_BOARD,ACTIVE_POINTS,w_head,stack,x,y);
+      find_words(ACTIVE_WORDLIST,ACTIVE_BOARD,ACTIVE_POINTS,ACTIVE_OUTPUT,stack,x,y);
     }
   }
-  return w_head;
+  return ACTIVE_OUTPUT;
 }
 
 EMSCRIPTEN_KEEPALIVE
@@ -104,9 +110,4 @@ float wordlist_readpoints(Wordlist_t *wordlist) {
 EMSCRIPTEN_KEEPALIVE
 Wordlist_t * wordlist_nextword(Wordlist_t *wordlist) {
   return wordlist->next;
-}
-
-EMSCRIPTEN_KEEPALIVE
-bool wordlist_done(Wordlist_t *wordlist) {
-  return wordlist == NULL || wordlist == 0;
 }

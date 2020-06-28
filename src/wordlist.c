@@ -43,3 +43,10 @@ void add_word(Wordlist_t *head,Word_t *word) {
     if (DEBUG == true) printf("[wlist] Inserted word %s\n",new_word->word->word);
   }
 }
+
+void free_wordlist(Wordlist_t *wordlist) {
+  if (wordlist->next != NULL) {
+    free_wordlist(wordlist->next);
+  }
+  free(wordlist);
+}

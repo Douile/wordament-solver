@@ -22,5 +22,6 @@ typedef struct Wordlist_t Wordlist_t;
 Word_t * new_word(char *word,float points);
 Wordlist_t * new_wordlist(Word_t *word);
 void add_word(Wordlist_t *head,Word_t *word);
+void free_wordlist(Wordlist_t *wordlist);
 
 #endif
