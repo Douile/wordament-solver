@@ -15,6 +15,7 @@ debug() {
 }
 
 
+cd ..
 if [ $# -gt 0 ]; then
   files=$1;
 else
@@ -26,4 +27,6 @@ if build $out "$files"; then
   echo 'Compiled successfully...';
 else
 	echo 'Compile error, exiting...';
+	exit 1;
 fi
+cd scripts
