@@ -44,7 +44,42 @@ const Wordament = Object.defineProperties({}, {
   },
   search: {
     get: function() {
-      return Module.cwrap('search', 'number', []);
+      return function() {
+        const wordlist = Module.cwrap('search', 'number', [])();
+        return new Wordlist(wordlist);
+      }
     }
   }
 })
+
+class Wordlist {
+  constructor(pointer) {
+    this.pointer = pointer;
+  }
+  [Symbol.iterator]() {
+    const readWord = Module.cwrap('wordlist_readword', 'string', ['number']);
+    const readPoints = Module.cwrap('wordlist_readpoints', 'number', ['number']);
+    const nextWord = Module.cwrap('wordlist_nextword', 'number', ['number']);
+    let node = this.pointer;
+    let i = 0;
+    return {
+      next: function() {
+        node = nextWord(node);
+        if (node === 0) return { value: i, done: true };
+        i++;
+        return { value: {
+          word: readWord(node),
+          points: readPoints(node)
+        }, done: false };
+      }
+    }
+  }
+  toArray() {
+    return Array.from(this);
+  }
+  log() {
+    for (let word of this) {
+      console.log(word);
+    }
+  }
+}
