@@ -15,9 +15,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get install emscripten python2.7 cmake &&
-          source /etc/profile.d/binaryen.sh &&
-          source /etc/profile.d/emscripten.sh &&
+          sudo apt-get install emscripten cmake &&
           emcc -v
 
       - name: Build
