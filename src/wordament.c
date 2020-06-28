@@ -1,7 +1,7 @@
 #include "wordament.h"
 
-bool DEBUG = false;
-bool VERBOOSE = false;
+bool DEBUG = true;
+bool VERBOOSE = true;
 char * WORDLIST = "./words/words_3_9.txt";
 int MIN_LENGTH = 0;
 

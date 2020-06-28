@@ -31,7 +31,7 @@ void add_word(Wordlist_t *head,Word_t *word) {
   }
   node = head;
   while (node->next != NULL) {
-    if (word->points <= node->next->word->points) break;
+    if (isgreater(word->points,node->next->word->points)) break;
     node = node->next;
   }
   if (node->next == NULL) {

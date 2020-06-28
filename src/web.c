@@ -90,3 +90,23 @@ Wordlist_t * search() {
   }
   return w_head;
 }
+
+EMSCRIPTEN_KEEPALIVE
+char * wordlist_readword(Wordlist_t *wordlist) {
+  return wordlist->word->word;
+}
+
+EMSCRIPTEN_KEEPALIVE
+float wordlist_readpoints(Wordlist_t *wordlist) {
+  return wordlist->word->points;
+}
+
+EMSCRIPTEN_KEEPALIVE
+Wordlist_t * wordlist_nextword(Wordlist_t *wordlist) {
+  return wordlist->next;
+}
+
+EMSCRIPTEN_KEEPALIVE
+bool wordlist_done(Wordlist_t *wordlist) {
+  return wordlist == NULL || wordlist == 0;
+}

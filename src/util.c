@@ -130,3 +130,9 @@ void debug_string(const char *chars) {
   }
   printf("  <-- Length: %d\n",i);
 }
+
+const double EPSILON = 10e-8;
+
+bool float_greater(float a, float b) {
+  return a > b && fabs(b - a) < EPSILON;
+}

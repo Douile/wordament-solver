@@ -5,6 +5,7 @@ typedef struct Wordlist_t Wordlist_t;
 #define _WORDLIST_INCLUDED
 
 #include "wordament.h"
+#include "math.h"
 
 struct Word_t {
   char *word;
