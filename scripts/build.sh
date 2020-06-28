@@ -7,15 +7,6 @@ build() {
 	emcc -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS="['cwrap']" -s ALLOW_MEMORY_GROWTH=1 -o $1 $2;
 }
 
-# Debug function
-# $1:Debugger, $2: executable
-debug() {
-	echo "Debugging $2";
-	$1 -ex "run" $2;
-}
-
-
-cd ..
 if [ $# -gt 0 ]; then
   files=$1;
 else
@@ -29,4 +20,3 @@ else
 	echo 'Compile error, exiting...';
 	exit 1;
 fi
-cd scripts

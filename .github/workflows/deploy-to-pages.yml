@@ -8,15 +8,15 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-
       - name: Install dependencies
         run: |
           sudo apt-get install emscripten cmake &&
           emcc -v
+
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
       - name: Build
         run: scripts/build.sh
