@@ -1,3 +1,7 @@
+/*******************************************************************************
+*** WASM iface
+*******************************************************************************/
+
 const Wordament = Object.defineProperties({}, {
   STATES: {
     get: function() {
@@ -83,3 +87,29 @@ class Wordlist {
     }
   }
 }
+
+/*******************************************************************************
+*** Events
+*******************************************************************************/
+
+window.addEventListener('click', function(e) {
+  const classes = e.target.classList.length;
+  for (let i=0;i<classes;i++) {
+    switch(e.target.classList.item(i)) {
+      case 'input-submit':
+      console.log('Solve');
+      break;
+    }
+  }
+});
+
+window.addEventListener('load', function() {
+  fetch('./assets/wordlist.txt', { mode: 'same-origin', credentials: 'omit' }).then(function(res) {
+    console.log(res);
+    res.text().then(function(text) {
+      console.log('Wordlist downloaded...');
+      const s = Wordament.loadWordlist(text);
+      if (s !== 0) console.error('Error parsing wordlist');
+    }, console.error);
+  }, console.error);
+}, { once: true });
