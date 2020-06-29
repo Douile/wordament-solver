@@ -26,11 +26,8 @@ int load_wordlist(char *wordlist) {
     printf("No Wordlist provided\n");
     return 1;
   }
-  if (ACTIVE_WORDLIST != NULL) {
-    free_trie(ACTIVE_WORDLIST);
-  }
 
-  ACTIVE_WORDLIST = parse_wordlist(wordlist);
+  parse_wordlist(ACTIVE_WORDLIST, wordlist);
   STATE |= STATE_WORDLIST;
   return 0;
 }
@@ -115,6 +112,8 @@ Wordlist_t * wordlist_nextword(Wordlist_t *wordlist) {
 EMSCRIPTEN_KEEPALIVE
 void set_debug(int flag) {
   DEBUGGING ^= flag;
+  debug_print("DEBUG enabled\n");
+  verbose_print("VERBOSE enabled\n");
 }
 
 int get_debug() {
