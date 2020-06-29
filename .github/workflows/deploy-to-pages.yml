@@ -22,6 +22,8 @@ jobs:
           # The cache folder will be placed in the build directory,
           #  so make sure it doesn't conflict with anything!
           actions-cache-folder: 'emsdk-cache'
+          # Disable cache (environment setup doesn't work with it for some reason)
+          no-cache: true
 
       - name: Build
         run: ./scripts/build.sh
