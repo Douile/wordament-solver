@@ -24,8 +24,8 @@
   font-weight: bolder;
   text-align: center;
   text-transform: uppercase;
-  box-shadow: 2px 2px 0px 1px var(--fg);
-  transition: filter .5s ease;
+  box-shadow: 2px 2px 0px 0px var(--fg);
+  transition: box-shadow .5s ease;
 }
 
 .input-box input {
@@ -37,7 +37,7 @@
 }
 
 .input-box input:hover, .input-box input:focus, .input-box input:active, .input-submit:hover {
-  filter: hue-rotate(15deg);
+  box-shadow: 2px 2px 0px 0px var(--hl);
 }
 
 body {
