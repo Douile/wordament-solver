@@ -1289,11 +1289,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 5247104,
+    STACK_BASE = 5247120,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 4224,
-    DYNAMIC_BASE = 5247104,
-    DYNAMICTOP_PTR = 4064;
+    STACK_MAX = 4240,
+    DYNAMIC_BASE = 5247120,
+    DYNAMICTOP_PTR = 4080;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1873,7 +1873,7 @@ var ASM_CONSTS = {
 
 
 
-// STATICTOP = STATIC_BASE + 3200;
+// STATICTOP = STATIC_BASE + 3216;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -1930,7 +1930,7 @@ var ASM_CONSTS = {
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 4064;
+      return 4080;
     }
 
   function _emscripten_memcpy_big(dest, src, num) {
@@ -2182,6 +2182,9 @@ var _wordlist_readpoints = Module["_wordlist_readpoints"] = createExportWrapper(
 
 /** @type {function(...*):?} */
 var _wordlist_nextword = Module["_wordlist_nextword"] = createExportWrapper("wordlist_nextword");
+
+/** @type {function(...*):?} */
+var _set_debug = Module["_set_debug"] = createExportWrapper("set_debug");
 
 /** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = createExportWrapper("__errno_location");
