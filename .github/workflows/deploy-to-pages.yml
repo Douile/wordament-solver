@@ -10,8 +10,12 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          sudo apt-get install emscripten cmake &&
-          emcc -v
+          sudo apt-get install python2.7 cmake default-jre git-core &&
+          git clone https://github.com/emscripten-core/emsdk.git &&
+          cd emsdk &&
+          ./emsdk install latest &&
+          ./emsdk activate latest &&
+          source ./emsdk_env.sh
 
       - name: checkout
         uses: actions/checkout@v2
