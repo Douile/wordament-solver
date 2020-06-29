@@ -147,7 +147,7 @@ function solveCurrentBoard() {
   for (let el of document.querySelectorAll('.input-box > input')) {
     const tile = el.value.trim();
     if (tile.length === 0) {
-      return alert('Please fill in all tiles');
+      return;
     }
     boardText += tile+'\n';
   }
@@ -178,16 +178,15 @@ function solveCurrentBoard() {
 *** Events
 *******************************************************************************/
 
-window.addEventListener('click', function(e) {
-  const classes = e.target.classList.length;
-  for (let i=0;i<classes;i++) {
-    switch(e.target.classList.item(i)) {
-      case 'input-submit':
-      solveCurrentBoard();
-      break;
-    }
+window.addEventListener('input', function(e) {
+  if (e.target.parentNode.classList.contains('input-box')) {
+    return solveCurrentBoard();
   }
 });
+
+/*******************************************************************************
+*** Init
+*******************************************************************************/
 
 function *splitWordlist(wordlist, splitSize) {
   const words = wordlist.split('\n');
@@ -216,6 +215,7 @@ async function init() {
     if (s !== 0) throw new Error('Error parsing wordlist');
   }
   console.log('Wordlist loaded');
+  solveCurrentBoard();
 }
 
 init().then(null, console.error);

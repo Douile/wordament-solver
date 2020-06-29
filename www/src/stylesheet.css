@@ -2,7 +2,7 @@
   display: grid;
   --size: min(50vw, 50vh);
   grid-template-columns: var(--size);
-  grid-template-rows: var(--size) calc(var(--size)/4);
+  grid-template-rows: var(--size);
 }
 
 .input-wrapper > * {
@@ -81,6 +81,10 @@ body {
   align-items: center;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+body > * {
+  margin: 0px 10px 0px 10px;
 }
 
 :root {
