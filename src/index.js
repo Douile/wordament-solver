@@ -36,7 +36,20 @@ class Wordlist {
 
 class InitializeWaiter {
   constructor() {
-    Module['onRuntimeInitialized'] = this.initalized.bind(this);
+    if (Module) {
+      Module['onRuntimeInitialized'] = this.initalized.bind(this);
+    } else {
+      const i = this.initalized.bind(this);
+      Object.defineProperty(window, 'Module', {
+        configurable: true,
+        get: function() {return undefined;},
+        set: function(value) {
+          value['onRuntimeInitialized'] = i;
+          Object.defineProperty(window, 'Module', { value: value });
+        }
+      })
+    }
+
     this.ready = false;
     this._q = [];
   }
