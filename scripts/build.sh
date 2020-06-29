@@ -1,14 +1,14 @@
 #!/bin/bash
 
 final_check() {
-	if ! [ -x "$(command -v emcc)"]; then
-		echo "Still couldn't find emcc in ${pwd}" >&2;
+	if [ -x "$(command -v emcc)"]; then
+		echo "Still couldn't find emcc in $PWD" >&2;
 		exit 1;
 	fi
 }
 
 # Check for required compiler
-if ! [ -x "$(command -v emcc)"]; then
+if [ -x "$(command -v emcc)"]; then
 	echo "emcc not found in path, looking for emsdk source";
 	if [ -f ./emsdk-cache/emsdk-master/emsdk_env.sh ]; then
 		source ./emsdk-cache/emsdk-master/emsdk_env.sh;
@@ -19,7 +19,7 @@ if ! [ -x "$(command -v emcc)"]; then
 		./emsdk-cache/emsdk-master/emsdk construct_env;
 		final_check;
 	else
-		echo "Couldn't find emcc or emsdk in ${pwd}" >&2;
+		echo "Couldn't find emcc or emsdk in $PWD" >&2;
 		exit 1;
 	fi
 fi
