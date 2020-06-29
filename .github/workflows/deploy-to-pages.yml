@@ -8,14 +8,18 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
-        run: |
-          sudo apt-get install python2.7 cmake default-jre git-core &&
-          git clone https://github.com/emscripten-core/emsdk.git &&
-          cd emsdk &&
-          ./emsdk install latest &&
-          ./emsdk activate latest &&
-          pwd
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v5
+        with:
+          # Make sure to set a version number!
+          version: latest
+          # This is the name of the cache folder.
+          # The cache folder will be placed in the build directory,
+          #  so make sure it doesn't conflict with anything!
+          actions-cache-folder: 'emsdk-cache'
+
+      - name: Verify emcc
+        run: emcc -v
 
       - name: checkout
         uses: actions/checkout@v2
@@ -23,11 +27,7 @@ jobs:
           persist-credentials: false
 
       - name: Build
-        run: |
-          ls -aR &&
-          pwd &&
-          source ./emsdk/emsdk_env.sh &&
-          ./scripts/build.sh
+        run: ./scripts/build.sh
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.5.6
