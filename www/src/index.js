@@ -1,4 +1,63 @@
 /*******************************************************************************
+*** Classes
+*******************************************************************************/
+
+class Wordlist {
+  constructor(pointer) {
+    this.pointer = pointer;
+  }
+  [Symbol.iterator]() {
+    const readWord = Module.cwrap('wordlist_readword', 'string', ['number']);
+    const readPoints = Module.cwrap('wordlist_readpoints', 'number', ['number']);
+    const nextWord = Module.cwrap('wordlist_nextword', 'number', ['number']);
+    let node = this.pointer;
+    let i = 0;
+    return {
+      next: function() {
+        node = nextWord(node);
+        if (node === 0) return { value: i, done: true };
+        i++;
+        return { value: {
+          word: readWord(node),
+          points: readPoints(node)
+        }, done: false };
+      }
+    }
+  }
+  toArray() {
+    return Array.from(this);
+  }
+  log() {
+    for (let word of this) {
+      console.log(word);
+    }
+  }
+}
+
+class InitializeWaiter {
+  constructor() {
+    Module['onRuntimeInitialized'] = this.initalized.bind(this);
+    this.ready = false;
+    this._q = [];
+  }
+  initialized() {
+    console.log('Runtime ready');
+    this.ready = true;
+    const ql = this._q.length;
+    for (let i=0;i<ql;i++) {this._q[i]()};
+  }
+  isReady() {
+    return this.ready();
+  }
+  wait() {
+    if (this.ready) return Promise.resolve();
+    return new Promise((resolve) => {
+      this._q.push(resolve);
+    })
+  }
+}
+
+/*******************************************************************************
 *** WASM iface
 *******************************************************************************/
 
@@ -64,58 +123,6 @@ const Wordament = Object.defineProperties({}, {
     value: new InitializeWaiter()
   }
 })
-
-class Wordlist {
-  constructor(pointer) {
-    this.pointer = pointer;
-  }
-  [Symbol.iterator]() {
-    const readWord = Module.cwrap('wordlist_readword', 'string', ['number']);
-    const readPoints = Module.cwrap('wordlist_readpoints', 'number', ['number']);
-    const nextWord = Module.cwrap('wordlist_nextword', 'number', ['number']);
-    let node = this.pointer;
-    let i = 0;
-    return {
-      next: function() {
-        node = nextWord(node);
-        if (node === 0) return { value: i, done: true };
-        i++;
-        return { value: {
-          word: readWord(node),
-          points: readPoints(node)
-        }, done: false };
-      }
-    }
-  }
-  toArray() {
-    return Array.from(this);
-  }
-  log() {
-    for (let word of this) {
-      console.log(word);
-    }
-  }
-}
-
-class InitializeWaiter {
-  constructor() {
-    Module['onRuntimeInitialized'] = this.initalized.bind(this);
-    this.ready = false;
-    this._q = [];
-  }
-  initialized() {
-    console.log('Runtime ready');
-    this.ready = true;
-    const ql = this._q.length;
-    for (let i=0;i<ql;i++) {this._q[i]()};
-  }
-  wait() {
-    if (this.ready) return Promise.resolve();
-    return new Promise((resolve) => {
-      this._q.push(resolve);
-    })
-  }
-}
 
 /*******************************************************************************
 *** Events
