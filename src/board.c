@@ -10,7 +10,7 @@ void print_board(char **board) {
       maxlen = l;
     }
   }
-  if (DEBUG == true || VERBOOSE == true) printf("[trie] Max tile length: %d\n",maxlen);
+  debug_print("[trie] Max tile length: %d\n",maxlen);
   int row_size = sizeof(char)*((ROW*(maxlen+1))+1);
   for (int y=0;y<ROW;y++) {
     char *row = malloc(row_size);
