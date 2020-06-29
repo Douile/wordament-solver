@@ -53,6 +53,11 @@ const Wordament = Object.defineProperties({}, {
         return new Wordlist(wordlist);
       }
     }
+  },
+  setDebug: {
+    get: function() {
+      return Module.cwrap('set_debug', null, ['number']);
+    }
   }
 })
 
@@ -108,6 +113,7 @@ window.addEventListener('load', function() {
     console.log(res);
     res.text().then(function(text) {
       console.log('Wordlist downloaded...');
+      Wordament.setDebug(1 | 1 << 1);
       const s = Wordament.loadWordlist(text);
       if (s !== 0) console.error('Error parsing wordlist');
     }, console.error);
