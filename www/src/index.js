@@ -215,6 +215,7 @@ async function init() {
     if (s !== 0) throw new Error('Error parsing wordlist');
   }
   console.log('Wordlist loaded');
+  document.querySelector('.loading').removeAttribute('open');
   solveCurrentBoard();
 }
 

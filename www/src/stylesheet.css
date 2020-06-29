@@ -42,7 +42,7 @@
 
 .output-wrapper {
   overflow-y: auto;
-  max-height: 60vh;
+  max-height: 80vh;
   width: max(20vw, 400px);
   text-align: center;
   color: var(--fg);
@@ -66,6 +66,24 @@
 
 .output-box > * > *:nth-child(2) {
   width: 100%;
+}
+
+.loading {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--fg);
+  color: var(--bg);
+  border-radius: 0 0 15px 0;
+  border: 0;
+  margin: 0;
+  transition: 2s ease-in transform;
+  transform: translateY(-100vh);
+}
+
+.loading[open] {
+  transform: translateY(0px);
 }
 
 body {
@@ -97,4 +115,5 @@ body > * {
   --bg-hl: #5a5e5c;
   --fg: #ffffff;
   --hl: #ffc000;
+  box-sizing: border-box;
 }
