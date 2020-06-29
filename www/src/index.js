@@ -163,10 +163,10 @@ function solveCurrentBoard() {
   }
 
   for (let word of output) {
-    const el = document.createElement('div');
-    const elPoints = document.createElement('strong');
+    const el = document.createElement('tr');
+    const elPoints = document.createElement('td');
     elPoints.innerText = `[${word.points}]`;
-    const elWord = document.createElement('span');
+    const elWord = document.createElement('td');
     elWord.innerText = word.word;
     el.appendChild(elPoints);
     el.appendChild(elWord);
