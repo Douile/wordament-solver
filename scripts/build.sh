@@ -13,11 +13,11 @@ if [ -x "$(command -v emcc)" ]; then
 	if [ -f ./emsdk-cache/emsdk-master/emsdk_env.sh ]; then
 		source ./emsdk-cache/emsdk-master/emsdk_env.sh;
 		echo "Sourced emsdk, running check again";
-		final_check;
+		# final_check;
 	elif [ -f ./emsdk-cache/emsdk-master/emsdk ]; then
 		echo "Found emsdk executable, constructing env";
 		./emsdk-cache/emsdk-master/emsdk construct_env;
-		final_check;
+		# final_check;
 	else
 		echo "Couldn't find emcc or emsdk in $PWD" >&2;
 		exit 1;
