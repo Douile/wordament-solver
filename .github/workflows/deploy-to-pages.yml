@@ -24,6 +24,7 @@ jobs:
 
       - name: Build
         run: |
+          ls -aR &&
           pwd &&
           source ./emsdk/emsdk_env.sh &&
           ./scripts/build.sh
