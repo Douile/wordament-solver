@@ -36,10 +36,10 @@ class Wordlist {
 
 class InitializeWaiter {
   constructor() {
-    if (Module) {
-      Module['onRuntimeInitialized'] = this.initalized.bind(this);
+    if ('Module' in window) {
+      Module['onRuntimeInitialized'] = this.initialized.bind(this);
     } else {
-      const i = this.initalized.bind(this);
+      const i = this.initialized.bind(this);
       Object.defineProperty(window, 'Module', {
         configurable: true,
         get: function() {return undefined;},
@@ -131,7 +131,7 @@ const Wordament = Object.defineProperties({}, {
       return Module.cwrap('set_debug', null, ['number']);
     }
   },
-  initalized: {
+  initialized: {
     writable: false,
     value: new InitializeWaiter()
   }
