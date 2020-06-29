@@ -18,13 +18,13 @@ jobs:
           #  so make sure it doesn't conflict with anything!
           actions-cache-folder: 'emsdk-cache'
 
-      - name: Verify emcc
-        run: emcc -v
-
       - name: checkout
         uses: actions/checkout@v2
         with:
           persist-credentials: false
+
+      - name: Verify emcc
+        run: emcc -v
 
       - name: Build
         run: ./scripts/build.sh
