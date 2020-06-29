@@ -23,9 +23,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Verify emcc
-        run: emcc -v
-
       - name: Build
         run: ./scripts/build.sh
 
