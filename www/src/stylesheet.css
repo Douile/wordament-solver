@@ -1,6 +1,6 @@
 .input-wrapper {
   display: grid;
-  --size: min(50vw, 50vh);
+  --size: max(min(50vw, 50vh), 400px);
   grid-template-columns: var(--size);
   grid-template-rows: var(--size);
 }
@@ -43,7 +43,7 @@
 .output-wrapper {
   overflow-y: auto;
   max-height: 60vh;
-  width: 20vw;
+  width: max(20vw, 400px);
   text-align: center;
   color: var(--fg);
 }
@@ -79,6 +79,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   overflow-x: hidden;
   overflow-y: auto;
 }
