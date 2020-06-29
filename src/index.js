@@ -152,14 +152,35 @@ window.addEventListener('click', function(e) {
   }
 });
 
+function *splitWordlist(wordlist, splitSize) {
+  const words = wordlist.split('\n');
+  const wl = words.length;
+  let chars = 0;
+  let last = 0;
+  for (let i=0;i<wl;i++) {
+    chars += words[i].length;
+    if (chars > splitSize) {
+      yield words.slice(last, i).join('\n');
+      chars = words[i].length;
+      last = i;
+    }
+  }
+  yield words.slice(last, wl).join('\n');
+}
+
 async function init() {
   const res = await fetch('./assets/wordlist.txt', { mode: 'same-origin', credentials: 'omit' });
   const text = await res.text();
   console.log('Wordlist downloaded...');
   await Wordament.initialized.wait();
-  Wordament.setDebug(1 | 1 << 1);
-  const s = Wordament.loadWordlist(text);
-  if (s !== 0) console.error('Error parsing wordlist');
+  Wordament.setDebug(1); // Don't turn on verbose here unless you wanna crash your browser
+  for (let split of splitWordlist(text, 256)) {
+    const s = Wordament.loadWordlist(split);
+    if (s !== 0) throw new Error('Error parsing wordlist');
+  }
+  console.log('Wordlist loaded');
+
+
 }
 
 init().then(null, console.error);
