@@ -1,8 +1,6 @@
 #include "wordament.h"
 
 int DEBUGGING = 0;
-bool DEBUG = false;
-bool VERBOOSE = false;
 int MIN_LENGTH = 0;
 
 void find_words(Trie_t *node,char **board,int *point_board,Wordlist_t *wordlist,unsigned int *stack,int ox,int oy) {
@@ -17,7 +15,7 @@ void find_words(Trie_t *node,char **board,int *point_board,Wordlist_t *wordlist,
         end = true;
       } else {
         if (stack_size(stack) > 0) return;
-        printf("Start char: %d\n",stack_size(stack));
+        debug_print("Start char: %d\n",stack_size(stack));
       }
       continue;
     } else if (c == '/') {
@@ -64,7 +62,7 @@ void find_words(Trie_t *node,char **board,int *point_board,Wordlist_t *wordlist,
     }
     word_s[x] = 0;
     word_s = realloc(word_s,sizeof(char)*(x+1));
-    if (VERBOOSE == true || DEBUG == true) printf("Found word: %s\n",word_s);
+    debug_print("Found word: %s\n",word_s);
     Word_t *word = new_word(word_s,points);
     add_word(wordlist,word);
   }

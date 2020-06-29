@@ -41,7 +41,7 @@ char * readline(char *wordlist, int *pos) {
   return line;
 }
 
-void parse_wordlist(Trie_t *head, char *wordlist) {
+Trie_t * parse_wordlist(Trie_t *head, char *wordlist) {
   size_t size = strlen(wordlist);
   int pos = 0;
   if (head == NULL) {
@@ -63,6 +63,7 @@ void parse_wordlist(Trie_t *head, char *wordlist) {
     verbose_print("[wparse] loaded %s\n", word);
     free(word);
   }
+  return head;
 }
 
 void debug_string(const char *chars) {

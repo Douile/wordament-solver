@@ -27,7 +27,7 @@ int load_wordlist(char *wordlist) {
     return 1;
   }
 
-  parse_wordlist(ACTIVE_WORDLIST, wordlist);
+  ACTIVE_WORDLIST = parse_wordlist(ACTIVE_WORDLIST, wordlist);
   STATE |= STATE_WORDLIST;
   return 0;
 }
@@ -64,6 +64,8 @@ int load_board(char *board) {
     ACTIVE_BOARD[i] = readline(board, &pos);
     ACTIVE_POINTS[i] = calc_points(ACTIVE_BOARD[i]);
   }
+
+  print_board(ACTIVE_BOARD);
 
   STATE |= STATE_BOARD;
   return 0;
