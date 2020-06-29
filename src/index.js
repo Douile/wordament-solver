@@ -60,7 +60,7 @@ class InitializeWaiter {
     for (let i=0;i<ql;i++) {this._q[i]()};
   }
   isReady() {
-    return this.ready();
+    return this.ready;
   }
   wait() {
     if (this.ready) return Promise.resolve();
@@ -138,6 +138,43 @@ const Wordament = Object.defineProperties({}, {
 })
 
 /*******************************************************************************
+*** Functions
+*******************************************************************************/
+
+function solveCurrentBoard() {
+  if (!Wordament.state.WORDLIST) return;
+  let boardText = '';
+  for (let el of document.querySelectorAll('.input-box > input')) {
+    const tile = el.value.trim();
+    if (tile.length === 0) {
+      return alert('Please fill in all tiles');
+    }
+    boardText += tile+'\n';
+  }
+  boardText = boardText.replace(new RegExp('[^a-z\\-\\/\n]','gi'), '').toLowerCase();
+  console.log(boardText);
+  Wordament.loadBoard(boardText);
+  const output = Wordament.search();
+
+  const outputBox = document.querySelector('.output-box');
+  if (output === null) throw new Error('Unable to find output box');
+  for (let child of outputBox.children) {
+    child.remove();
+  }
+
+  for (let word of output) {
+    const el = document.createElement('div');
+    const elPoints = document.createElement('strong');
+    elPoints.innerText = `[${word.points}]`;
+    const elWord = document.createElement('span');
+    elWord.innerText = word.word;
+    el.appendChild(elPoints);
+    el.appendChild(elWord);
+    outputBox.appendChild(el);
+  }
+}
+
+/*******************************************************************************
 *** Events
 *******************************************************************************/
 
@@ -146,7 +183,7 @@ window.addEventListener('click', function(e) {
   for (let i=0;i<classes;i++) {
     switch(e.target.classList.item(i)) {
       case 'input-submit':
-      console.log('Solve');
+      solveCurrentBoard();
       break;
     }
   }
@@ -173,14 +210,12 @@ async function init() {
   const text = await res.text();
   console.log('Wordlist downloaded...');
   await Wordament.initialized.wait();
-  Wordament.setDebug(1); // Don't turn on verbose here unless you wanna crash your browser
-  for (let split of splitWordlist(text, 256)) {
+  // Wordament.setDebug(1); // Don't turn on verbose here unless you wanna crash your browser
+  for (let split of splitWordlist(text, 512)) {
     const s = Wordament.loadWordlist(split);
     if (s !== 0) throw new Error('Error parsing wordlist');
   }
   console.log('Wordlist loaded');
-
-
 }
 
 init().then(null, console.error);
