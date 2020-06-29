@@ -37,6 +37,7 @@ char * readline(char *wordlist, int *pos) {
   } else {
     line = realloc(line,size);
   }
+  verbose_print("[readline] read: %s\n", line);
   return line;
 }
 
