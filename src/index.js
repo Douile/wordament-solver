@@ -58,6 +58,10 @@ const Wordament = Object.defineProperties({}, {
     get: function() {
       return Module.cwrap('set_debug', null, ['number']);
     }
+  },
+  initalized: {
+    writable: false,
+    value: new InitializeWaiter()
   }
 })
 
@@ -93,6 +97,26 @@ class Wordlist {
   }
 }
 
+class InitializeWaiter {
+  constructor() {
+    Module['onRuntimeInitialized'] = this.initalized.bind(this);
+    this.ready = false;
+    this._q = [];
+  }
+  initialized() {
+    console.log('Runtime ready');
+    this.ready = true;
+    const ql = this._q.length;
+    for (let i=0;i<ql;i++) {this._q[i]()};
+  }
+  wait() {
+    if (this.ready) return Promise.resolve();
+    return new Promise((resolve) => {
+      this._q.push(resolve);
+    })
+  }
+}
+
 /*******************************************************************************
 *** Events
 *******************************************************************************/
@@ -108,14 +132,14 @@ window.addEventListener('click', function(e) {
   }
 });
 
-window.addEventListener('load', function() {
-  fetch('./assets/wordlist.txt', { mode: 'same-origin', credentials: 'omit' }).then(function(res) {
-    console.log(res);
-    res.text().then(function(text) {
-      console.log('Wordlist downloaded...');
-      Wordament.setDebug(1 | 1 << 1);
-      const s = Wordament.loadWordlist(text);
-      if (s !== 0) console.error('Error parsing wordlist');
-    }, console.error);
-  }, console.error);
-}, { once: true });
+async function init() {
+  const res = await fetch('./assets/wordlist.txt', { mode: 'same-origin', credentials: 'omit' });
+  const text = await res.text();
+  console.log('Wordlist downloaded...');
+  await Wordament.initialized.wait();
+  Wordament.setDebug(1 | 1 << 1);
+  const s = Wordament.loadWordlist(text);
+  if (s !== 0) console.error('Error parsing wordlist');
+}
+
+init().then(null, console.error);
