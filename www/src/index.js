@@ -85,12 +85,12 @@ const Wordament = Object.defineProperties({}, {
   },
   version: {
     get: function() {
-      return Module.cwrap('version', 'int', []);
+      return Module.cwrap('version', 'number', []);
     }
   },
   getState: {
     get: function() {
-      return Module.cwrap('get_state', 'int', []);
+      return Module.cwrap('get_state', 'number', []);
     }
   },
   state: {
