@@ -1,8 +1,8 @@
 #include "wordament.h"
 
-bool DEBUG = true;
-bool VERBOOSE = true;
-char * WORDLIST = "./words/words_3_9.txt";
+int DEBUGGING = 0;
+bool DEBUG = false;
+bool VERBOOSE = false;
 int MIN_LENGTH = 0;
 
 void find_words(Trie_t *node,char **board,int *point_board,Wordlist_t *wordlist,unsigned int *stack,int ox,int oy) {

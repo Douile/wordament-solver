@@ -111,3 +111,12 @@ EMSCRIPTEN_KEEPALIVE
 Wordlist_t * wordlist_nextword(Wordlist_t *wordlist) {
   return wordlist->next;
 }
+
+EMSCRIPTEN_KEEPALIVE
+void set_debug(int flag) {
+  DEBUGGING ^= flag;
+}
+
+int get_debug() {
+  return DEBUGGING;
+}

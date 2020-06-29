@@ -15,9 +15,9 @@ typedef enum {false, true} bool;
 #define POSITIONS ROW*ROW
 #define VERSION 1
 
-extern bool DEBUG;
-extern bool VERBOOSE;
-extern char * WORDLIST;
+extern int DEBUGGING;
+#define FLAG_DEBUG    1 << 0
+#define FLAG_VERBOSE  1 << 1
 extern int MIN_LENGTH;
 
 #include "trie.h"

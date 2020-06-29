@@ -22,7 +22,7 @@ void add_word(Wordlist_t *head,Word_t *word) {
   while (node->next != NULL) {
     node = node->next;
     if (strcmp(word->word,node->word->word) == 0 && word->points == node->word->points) {
-      if (VERBOOSE == true || DEBUG == true) printf("Duplicate word %s\n",word->word);
+      debug_print("Duplicate word %s\n",word->word);
       free(word->word);
       free(word);
       free(new_word);
@@ -36,11 +36,11 @@ void add_word(Wordlist_t *head,Word_t *word) {
   }
   if (node->next == NULL) {
     node->next = new_word;
-    if (DEBUG == true) printf("[wlist] Appended word %s\n",new_word->word->word);
+    debug_print("[wlist] Appended word %s\n",new_word->word->word);
   } else {
     new_word->next = node->next;;
     node->next = new_word;
-    if (DEBUG == true) printf("[wlist] Inserted word %s\n",new_word->word->word);
+    debug_print("[wlist] Inserted word %s\n",new_word->word->word);
   }
 }
 
