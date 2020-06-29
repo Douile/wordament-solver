@@ -8,6 +8,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
       - name: Setup emsdk
         uses: mymindstorm/setup-emsdk@v5
         with:
@@ -17,11 +22,6 @@ jobs:
           # The cache folder will be placed in the build directory,
           #  so make sure it doesn't conflict with anything!
           actions-cache-folder: 'emsdk-cache'
-
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
 
       - name: Build
         run: ./scripts/build.sh
