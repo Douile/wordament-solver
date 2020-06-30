@@ -65,8 +65,6 @@ int load_board(char *board) {
     ACTIVE_POINTS[i] = calc_points(ACTIVE_BOARD[i]);
   }
 
-  print_board(ACTIVE_BOARD);
-
   STATE |= STATE_BOARD;
   return 0;
 }

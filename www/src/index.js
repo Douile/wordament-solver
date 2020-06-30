@@ -70,6 +70,26 @@ class InitializeWaiter {
   }
 }
 
+class SolveQueue {
+  constructor() {
+    this.active = false;
+    this.next = false;
+  }
+  solve() {
+    if (this.active) {
+      this.next = true;
+    } else {
+      this.active = true;
+      solveCurrentBoard();
+      this.active = false;
+      if (this.next) {
+        this.next = false;
+        this.solve();
+      }
+    }
+  }
+}
+
 /*******************************************************************************
 *** WASM iface
 *******************************************************************************/
@@ -134,6 +154,10 @@ const Wordament = Object.defineProperties({}, {
   initialized: {
     writable: false,
     value: new InitializeWaiter()
+  },
+  solveQueue: {
+    writable: false,
+    value: new SolveQueue()
   }
 })
 
@@ -145,33 +169,43 @@ function solveCurrentBoard() {
   if (!Wordament.state.WORDLIST) return;
   let boardText = '';
   for (let el of document.querySelectorAll('.input-box > input')) {
-    const tile = el.value.trim();
+    const tile = el.value.replace(new RegExp('[^a-z\\-\\/]','gi'), '').toLowerCase();
     if (tile.length === 0) {
       return;
     }
     boardText += tile+'\n';
   }
-  boardText = boardText.replace(new RegExp('[^a-z\\-\\/\n]','gi'), '').toLowerCase();
-  console.log(boardText);
+  boardText = boardText;
   Wordament.loadBoard(boardText);
   const output = Wordament.search();
 
   const outputBox = document.querySelector('.output-box');
   if (output === null) throw new Error('Unable to find output box');
+  const generator = output[Symbol.iterator]();
+  let word = generator.next();
   for (let child of outputBox.children) {
-    child.remove();
+    if (word.done) {
+      child.remove();
+    } else {
+      child.children[0].innerText = `[${word.value.points}]`;
+      child.children[1].innerText = word.value.word;
+      word = generator.next();
+    }
   }
 
-  for (let word of output) {
+  while (!word.done) {
     const el = document.createElement('tr');
     const elPoints = document.createElement('td');
-    elPoints.innerText = `[${word.points}]`;
+    elPoints.innerText = `[${word.value.points}]`;
     const elWord = document.createElement('td');
-    elWord.innerText = word.word;
+    elWord.innerText = word.value.word;
     el.appendChild(elPoints);
     el.appendChild(elWord);
     outputBox.appendChild(el);
+    word = generator.next();
   }
+
+  console.log(output.toArray());
 }
 
 /*******************************************************************************
@@ -180,7 +214,7 @@ function solveCurrentBoard() {
 
 window.addEventListener('input', function(e) {
   if (e.target.parentNode.classList.contains('input-box')) {
-    return solveCurrentBoard();
+    return Wordament.solveQueue.solve();
   }
 });
 
@@ -216,7 +250,7 @@ async function init() {
   }
   console.log('Wordlist loaded');
   document.querySelector('.loading').removeAttribute('open');
-  solveCurrentBoard();
+  Wordament.solveQueue.solve();
 }
 
 init().then(null, console.error);
