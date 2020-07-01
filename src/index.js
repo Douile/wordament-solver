@@ -9,6 +9,7 @@ class Wordlist {
   [Symbol.iterator]() {
     const readWord = Module.cwrap('wordlist_readword', 'string', ['number']);
     const readPoints = Module.cwrap('wordlist_readpoints', 'number', ['number']);
+    const readStack = Module.cwrap('wordlist_readstack', 'number', ['number'])
     const nextWord = Module.cwrap('wordlist_nextword', 'number', ['number']);
     let node = this.pointer;
     let i = 0;
@@ -19,7 +20,8 @@ class Wordlist {
         i++;
         return { value: {
           word: readWord(node),
-          points: readPoints(node)
+          points: readPoints(node),
+          stack: readStack(node)
         }, done: false };
       }
     }
@@ -67,6 +69,26 @@ class InitializeWaiter {
     return new Promise((resolve) => {
       this._q.push(resolve);
     })
+  }
+}
+
+class SolveQueue {
+  constructor() {
+    this.active = false;
+    this.next = false;
+  }
+  solve() {
+    if (this.active) {
+      this.next = true;
+    } else {
+      this.active = true;
+      solveCurrentBoard();
+      this.active = false;
+      if (this.next) {
+        this.next = false;
+        this.solve();
+      }
+    }
   }
 }
 
@@ -131,9 +153,26 @@ const Wordament = Object.defineProperties({}, {
       return Module.cwrap('set_debug', null, ['number']);
     }
   },
+  readStack: {
+    writable: false,
+    value: function(ptr) {
+      const POSITIONS = 16;
+      let stack = new Uint32Array(POSITIONS);
+      let pos;
+      for (let i=0;i<POSITIONS && pos !== 0;i++) {
+        pos = Module.getValue(ptr + (i*4), 'i32');
+        stack[i] = pos;
+      }
+      return stack;
+    }
+  },
   initialized: {
     writable: false,
     value: new InitializeWaiter()
+  },
+  solveQueue: {
+    writable: false,
+    value: new SolveQueue()
   }
 })
 
@@ -142,36 +181,51 @@ const Wordament = Object.defineProperties({}, {
 *******************************************************************************/
 
 function solveCurrentBoard() {
+  for (let el of document.querySelectorAll('.active')) {
+    el.classList.remove('active');
+  }
   if (!Wordament.state.WORDLIST) return;
   let boardText = '';
   for (let el of document.querySelectorAll('.input-box > input')) {
-    const tile = el.value.trim();
+    const tile = el.value.replace(new RegExp('[^a-z\\-\\/]','gi'), '').toLowerCase();
     if (tile.length === 0) {
       return;
     }
     boardText += tile+'\n';
   }
-  boardText = boardText.replace(new RegExp('[^a-z\\-\\/\n]','gi'), '').toLowerCase();
-  console.log(boardText);
+  boardText = boardText;
   Wordament.loadBoard(boardText);
   const output = Wordament.search();
 
   const outputBox = document.querySelector('.output-box');
   if (output === null) throw new Error('Unable to find output box');
+  const generator = output[Symbol.iterator]();
+  let word = generator.next();
   for (let child of outputBox.children) {
-    child.remove();
+    if (word.done) {
+      child.remove();
+    } else {
+      child.setAttribute('data-stack', word.value.stack);
+      child.children[0].innerText = `[${word.value.points}]`;
+      child.children[1].innerText = word.value.word;
+      word = generator.next();
+    }
   }
 
-  for (let word of output) {
+  while (!word.done) {
     const el = document.createElement('tr');
+    el.setAttribute('data-stack', word.value.stack);
     const elPoints = document.createElement('td');
-    elPoints.innerText = `[${word.points}]`;
+    elPoints.innerText = `[${word.value.points}]`;
     const elWord = document.createElement('td');
-    elWord.innerText = word.word;
+    elWord.innerText = word.value.word;
     el.appendChild(elPoints);
     el.appendChild(elWord);
     outputBox.appendChild(el);
+    word = generator.next();
   }
+
+  // console.log(output.toArray());
 }
 
 /*******************************************************************************
@@ -180,9 +234,22 @@ function solveCurrentBoard() {
 
 window.addEventListener('input', function(e) {
   if (e.target.parentNode.classList.contains('input-box')) {
-    return solveCurrentBoard();
+    return Wordament.solveQueue.solve();
   }
 });
+
+window.addEventListener('click', function(e) {
+  const stack = e.target.parentNode.getAttribute('data-stack')
+  if (stack !== null) {
+    for (let el of document.querySelectorAll('.active')) {
+      el.classList.remove('active');
+    }
+    for (let index of Wordament.readStack(parseInt(stack))) {
+      if (index === 0) break;
+      document.querySelector(`.input-box > *:nth-child(${index})`).classList.add('active');
+    }
+  }
+})
 
 /*******************************************************************************
 *** Init
@@ -216,7 +283,7 @@ async function init() {
   }
   console.log('Wordlist loaded');
   document.querySelector('.loading').removeAttribute('open');
-  solveCurrentBoard();
+  Wordament.solveQueue.solve();
 }
 
 init().then(null, console.error);
