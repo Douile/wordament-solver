@@ -1,9 +1,10 @@
 #include "wordlist.h"
 
-Word_t * new_word(char *word,float points) {
+Word_t * new_word(char *word,float points,unsigned int *stack) {
   Word_t * node = malloc(sizeof(Word_t));
   node->word = word;
   node->points = points;
+  node->stack = stack_copy(stack);
   return node;
 }
 
@@ -47,6 +48,11 @@ void add_word(Wordlist_t *head,Word_t *word) {
 void free_wordlist(Wordlist_t *wordlist) {
   if (wordlist->next != NULL) {
     free_wordlist(wordlist->next);
+  }
+  if (wordlist->word != NULL) {
+    if (wordlist->word->word != NULL) free(wordlist->word->word);
+    if (wordlist->word->stack != NULL) free(wordlist->word->stack);
+    free(wordlist->word);
   }
   free(wordlist);
 }

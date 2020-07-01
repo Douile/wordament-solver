@@ -8,5 +8,6 @@ unsigned int stack_get(unsigned int *stack,int n);
 void stack_add(unsigned int *stack,int x,int y);
 void stack_reduce(unsigned int *stack);
 bool stack_includes(unsigned int *stack,int x,int y);
+unsigned int * stack_copy(unsigned int *stack);
 
 #endif

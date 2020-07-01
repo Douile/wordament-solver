@@ -9,6 +9,7 @@ class Wordlist {
   [Symbol.iterator]() {
     const readWord = Module.cwrap('wordlist_readword', 'string', ['number']);
     const readPoints = Module.cwrap('wordlist_readpoints', 'number', ['number']);
+    const readStack = Module.cwrap('wordlist_readstack', 'number', ['number'])
     const nextWord = Module.cwrap('wordlist_nextword', 'number', ['number']);
     let node = this.pointer;
     let i = 0;
@@ -19,7 +20,8 @@ class Wordlist {
         i++;
         return { value: {
           word: readWord(node),
-          points: readPoints(node)
+          points: readPoints(node),
+          stack: readStack(node)
         }, done: false };
       }
     }
@@ -151,6 +153,19 @@ const Wordament = Object.defineProperties({}, {
       return Module.cwrap('set_debug', null, ['number']);
     }
   },
+  readStack: {
+    writable: false,
+    value: function(ptr) {
+      const POSITIONS = 16;
+      let stack = new Uint32Array(POSITIONS);
+      let pos;
+      for (let i=0;i<POSITIONS && pos !== 0;i++) {
+        pos = Module.getValue(ptr + (i*4), 'i32');
+        stack[i] = pos;
+      }
+      return stack;
+    }
+  },
   initialized: {
     writable: false,
     value: new InitializeWaiter()
@@ -166,6 +181,9 @@ const Wordament = Object.defineProperties({}, {
 *******************************************************************************/
 
 function solveCurrentBoard() {
+  for (let el of document.querySelectorAll('.active')) {
+    el.classList.remove('active');
+  }
   if (!Wordament.state.WORDLIST) return;
   let boardText = '';
   for (let el of document.querySelectorAll('.input-box > input')) {
@@ -187,6 +205,7 @@ function solveCurrentBoard() {
     if (word.done) {
       child.remove();
     } else {
+      child.setAttribute('data-stack', word.value.stack);
       child.children[0].innerText = `[${word.value.points}]`;
       child.children[1].innerText = word.value.word;
       word = generator.next();
@@ -195,6 +214,7 @@ function solveCurrentBoard() {
 
   while (!word.done) {
     const el = document.createElement('tr');
+    el.setAttribute('data-stack', word.value.stack);
     const elPoints = document.createElement('td');
     elPoints.innerText = `[${word.value.points}]`;
     const elWord = document.createElement('td');
@@ -205,7 +225,7 @@ function solveCurrentBoard() {
     word = generator.next();
   }
 
-  console.log(output.toArray());
+  // console.log(output.toArray());
 }
 
 /*******************************************************************************
@@ -217,6 +237,19 @@ window.addEventListener('input', function(e) {
     return Wordament.solveQueue.solve();
   }
 });
+
+window.addEventListener('click', function(e) {
+  const stack = e.target.parentNode.getAttribute('data-stack')
+  if (stack !== null) {
+    for (let el of document.querySelectorAll('.active')) {
+      el.classList.remove('active');
+    }
+    for (let index of Wordament.readStack(parseInt(stack))) {
+      if (index === 0) break;
+      document.querySelector(`.input-box > *:nth-child(${index})`).classList.add('active');
+    }
+  }
+})
 
 /*******************************************************************************
 *** Init

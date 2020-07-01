@@ -1,23 +1,23 @@
 #!/bin/bash
 
 final_check() {
-	if [ -x "$(command -v emcc)" ]; then
+	if ! [ -x "$(command -v emcc)" ]; then
 		echo "Still couldn't find emcc in $PWD" >&2;
 		exit 1;
 	fi
 }
 
 # Check for required compiler
-if [ -x "$(command -v emcc)" ]; then
+if ! [ -x "$(command -v emcc)" ]; then
 	echo "emcc not found in path, looking for emsdk source";
 	if [ -f ./emsdk-cache/emsdk-master/emsdk_env.sh ]; then
 		source ./emsdk-cache/emsdk-master/emsdk_env.sh;
 		echo "Sourced emsdk, running check again";
-		# final_check;
+		final_check;
 	elif [ -f ./emsdk-cache/emsdk-master/emsdk ]; then
 		echo "Found emsdk executable, constructing env";
 		./emsdk-cache/emsdk-master/emsdk construct_env;
-		# final_check;
+		final_check;
 	else
 		echo "Couldn't find emcc or emsdk in $PWD" >&2;
 		exit 1;
@@ -28,7 +28,7 @@ fi
 # $1:Source files $2:Output file
 build() {
 	echo "Building $2";
-	emcc -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS="['cwrap']" -s ALLOW_MEMORY_GROWTH=1 -o $1 $2;
+	emcc -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS="['cwrap','getValue','UTF8ToString','intArrayFromString']" -s ALLOW_MEMORY_GROWTH=1 -o $1 $2;
 }
 
 # Detect build files

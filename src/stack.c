@@ -41,3 +41,12 @@ bool stack_includes(unsigned int *stack,int x,int y) {
   }
   return false;
 }
+
+unsigned int * stack_copy(unsigned int *stack) {
+  int size = stack_size(stack)+1;
+  unsigned int *clone = malloc(sizeof(unsigned int)*size);
+  for (int i=0;i<size;i++) {
+    clone[i] = stack[i];
+  }
+  return clone;
+}

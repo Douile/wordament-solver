@@ -50,9 +50,11 @@ int load_board(char *board) {
   }
 
   if (ACTIVE_BOARD != NULL) {
+    debug_print("[web] Freeing old board\n");
     free(ACTIVE_BOARD);
   }
   if (ACTIVE_POINTS != NULL) {
+    debug_print("[web] Freeing old points\n");
     free(ACTIVE_POINTS);
   }
 
@@ -64,6 +66,8 @@ int load_board(char *board) {
     ACTIVE_BOARD[i] = readline(board, &pos);
     ACTIVE_POINTS[i] = calc_points(ACTIVE_BOARD[i]);
   }
+
+  debug_print("[web] Loaded board and calculated points\n");
 
   STATE |= STATE_BOARD;
   return 0;
@@ -80,9 +84,11 @@ Wordlist_t * search() {
   }
 
   if (ACTIVE_OUTPUT != NULL) {
+    debug_print("[web] Freeing old results\n");
     free_wordlist(ACTIVE_OUTPUT);
   }
 
+  debug_print("[web] Searching...\n");
   ACTIVE_OUTPUT = new_wordlist(NULL);
   for (int y=0;y<ROW;y++) {
     for (int x=0;x<ROW;x++) {
@@ -91,6 +97,7 @@ Wordlist_t * search() {
       find_words(ACTIVE_WORDLIST,ACTIVE_BOARD,ACTIVE_POINTS,ACTIVE_OUTPUT,stack,x,y);
     }
   }
+  debug_print("[web] Search completed\n");
   return ACTIVE_OUTPUT;
 }
 
@@ -105,6 +112,11 @@ float wordlist_readpoints(Wordlist_t *wordlist) {
 }
 
 EMSCRIPTEN_KEEPALIVE
+unsigned int * wordlist_readstack(Wordlist_t *wordlist) {
+  return wordlist->word->stack;
+}
+
+EMSCRIPTEN_KEEPALIVE
 Wordlist_t * wordlist_nextword(Wordlist_t *wordlist) {
   return wordlist->next;
 }
@@ -116,6 +128,7 @@ void set_debug(int flag) {
   verbose_print("VERBOSE enabled\n");
 }
 
+EMSCRIPTEN_KEEPALIVE
 int get_debug() {
   return DEBUGGING;
 }

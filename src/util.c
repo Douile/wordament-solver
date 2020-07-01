@@ -79,8 +79,12 @@ void debug_string(const char *chars) {
   debug_print("  <-- Length: %d\n",i);
 }
 
+bool is_debug() {
+  return DEBUGGING >= FLAG_DEBUG;
+}
+
 void debug_print(const char * format, ...) {
-  if (DEBUGGING >= FLAG_DEBUG) {
+  if (is_debug()) {
     va_list argptr;
     va_start(argptr,format);
     vprintf(format, argptr);
@@ -88,8 +92,12 @@ void debug_print(const char * format, ...) {
   }
 }
 
+bool is_verbose() {
+  return DEBUGGING >= FLAG_VERBOSE;
+}
+
 void verbose_print(const char * format, ...) {
-  if (DEBUGGING >= FLAG_VERBOSE) {
+  if (is_verbose()) {
     va_list argptr;
     va_start(argptr,format);
     vprintf(format, argptr);

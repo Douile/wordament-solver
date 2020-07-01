@@ -62,8 +62,10 @@ void find_words(Trie_t *node,char **board,int *point_board,Wordlist_t *wordlist,
     }
     word_s[x] = 0;
     word_s = realloc(word_s,sizeof(char)*(x+1));
-    debug_print("Found word: %s\n",word_s);
-    Word_t *word = new_word(word_s,points);
+    Word_t *word = new_word(word_s,points,stack);
+    if (is_debug()) {
+      debug_print("[search] Found word: %s (stack size %d:%d)\n",word_s,stack_size(stack),stack_size(word->stack));
+    }
     add_word(wordlist,word);
   }
   if (end == false) {
