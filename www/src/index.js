@@ -227,9 +227,12 @@ function solveCurrentBoard() {
 }
 
 function clearActive() {
+  let cleared = 0;
   for (let el of document.querySelectorAll('.active')) {
     el.classList.remove('active');
+    cleared++;
   }
+  return cleared;
 }
 
 const displayStack = {
@@ -239,7 +242,9 @@ const displayStack = {
   display: async function (stack) {
     await displayStack.cancelCurrent();
     displayStack.active = true;
-    clearActive();
+    if (clearActive() > 0) {
+      await displayStack.delay(500);
+    }
     for (let index of Wordament.readStack(parseInt(stack))) {
       if (index === 0) break;
       await displayStack.delay(250);

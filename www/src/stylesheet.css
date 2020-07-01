@@ -16,6 +16,8 @@
 }
 
 .input-box input, .input-submit {
+  --shadow: var(--fg);
+  --scale: 1;
   border: 0;
   border-radius: 5px;
   background-color: var(--hl);
@@ -23,8 +25,8 @@
   font-weight: bolder;
   text-align: center;
   text-transform: uppercase;
-  box-shadow: 2px 2px 0px 0px var(--fg);
-  transition: box-shadow .5s ease;
+  box-shadow: 2px 2px 0px 0px var(--shadow);
+  transition: background-color .5s ease, transform .5s ease, box-shadow .5s ease, border-radius .5s ease;
 }
 
 .input-box input {
@@ -36,17 +38,19 @@
 }
 
 .input-box input:hover, .input-box input:focus, .input-box input:active, .input-submit:hover {
-  box-shadow: 0px 0px 0px 0px var(--hl);
+  --scale: 0.95;
+  box-shadow: 0px 0px 0px 0px var(--shadow);
+  transform: scale(var(--scale));
 }
 
 .input-box > .active {
-  transform: rotateY(180deg) scale(-1, 1);
+  --shadow: var(--hl);
+  transform: rotateY(180deg) scale(calc(var(--scale) *-1), 1) !important;
   background-color: var(--fg);
 }
 
 .input-box > * {
   transform: rotateY(0deg);
-  transition: background-color .5s ease, transform .5s ease, box-shadow .5s ease !important;
 }
 
 .output-wrapper {
