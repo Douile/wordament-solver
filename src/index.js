@@ -181,9 +181,7 @@ const Wordament = Object.defineProperties({}, {
 *******************************************************************************/
 
 function solveCurrentBoard() {
-  for (let el of document.querySelectorAll('.active')) {
-    el.classList.remove('active');
-  }
+  clearActive();
   if (!Wordament.state.WORDLIST) return;
   let boardText = '';
   for (let el of document.querySelectorAll('.input-box > input')) {
@@ -193,7 +191,7 @@ function solveCurrentBoard() {
     }
     boardText += tile+'\n';
   }
-  boardText = boardText;
+  location.hash = btoa(boardText);
   Wordament.loadBoard(boardText);
   const output = Wordament.search();
 
@@ -228,6 +226,58 @@ function solveCurrentBoard() {
   // console.log(output.toArray());
 }
 
+function clearActive() {
+  for (let el of document.querySelectorAll('.active')) {
+    el.classList.remove('active');
+  }
+}
+
+const displayStack = {
+  active: false,
+  cancel: undefined,
+  waitForCancel: [],
+  display: async function (stack) {
+    await displayStack.cancelCurrent();
+    displayStack.active = true;
+    clearActive();
+    for (let index of Wordament.readStack(parseInt(stack))) {
+      if (index === 0) break;
+      await displayStack.delay(250);
+      document.querySelector(`.input-box > *:nth-child(${index})`).classList.add('active');
+    }
+    displayStack.active = false;
+  },
+  delay: function (time) {
+    const delay = new Promise((resolve) => {setTimeout(resolve, time)});
+    const cancel = new Promise((resolve, reject) => {displayStack.cancel = reject});
+    return new Promise((resolve, reject) => {
+      Promise.race([delay, cancel]).then(function() {
+        displayStack.cancel = undefined;
+        resolve.apply(this, arguments);
+      }).catch(function() {
+        displayStack.cancel = undefined;
+        reject.apply(this, arguments);
+      });
+      for (let canceller of displayStack.waitForCancel) {
+        canceller();
+      }
+    })
+  },
+  cancelCurrent: async function () {
+    if (!displayStack.active) return;
+    if (displayStack.cancel === undefined) {
+      await displayStack.awaitCancel();
+    }
+    displayStack.cancel('Cancelling display');
+  },
+  awaitCancel: function () {
+    return new Promise((resolve) => {
+      displayStack.waitForCancel.push(resolve);
+    })
+  }
+}
+
+
 /*******************************************************************************
 *** Events
 *******************************************************************************/
@@ -241,13 +291,7 @@ window.addEventListener('input', function(e) {
 window.addEventListener('click', function(e) {
   const stack = e.target.parentNode.getAttribute('data-stack')
   if (stack !== null) {
-    for (let el of document.querySelectorAll('.active')) {
-      el.classList.remove('active');
-    }
-    for (let index of Wordament.readStack(parseInt(stack))) {
-      if (index === 0) break;
-      document.querySelector(`.input-box > *:nth-child(${index})`).classList.add('active');
-    }
+    displayStack.display(stack).then(null, console.warn);
   }
 })
 
@@ -271,6 +315,22 @@ function *splitWordlist(wordlist, splitSize) {
   yield words.slice(last, wl).join('\n');
 }
 
+function loadHash() {
+  if (location.hash.length > 1) {
+    let board;
+    try {
+      board = atob(location.hash.substring(1)).split('\n');
+    } catch(e) {
+      return console.error(e);
+    }
+    const size = board.length;
+    for (let i=0;i<size;i++) {
+      const el = document.querySelector(`.input-box > input:nth-child(${i+1})`);
+      if (el !== null) el.value = board[i];
+    }
+  }
+}
+
 async function init() {
   const res = await fetch('./assets/wordlist.txt', { mode: 'same-origin', credentials: 'omit' });
   const text = await res.text();
@@ -287,3 +347,4 @@ async function init() {
 }
 
 init().then(null, console.error);
+loadHash();
