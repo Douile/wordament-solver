@@ -9,7 +9,7 @@ def check(line,**kwargs):
     # line of format: word\n
     # length constraints
     min_length = kwargs.get('min_length',3)
-    max_length = kwargs.get('max_length',9)
+    max_length = kwargs.get('max_length',16)
     if not isinstance(line,str):
         if isinstance(line,bytes):
             line = str(line,'utf-8')
@@ -22,12 +22,19 @@ def check(line,**kwargs):
         return False
     return True
 
+def convert(line):
+    space = line.find(b' ')
+    if line[0] == b'#':
+        return b''
+    return line[:space].lower()+b'\n'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='Wordlist Sorter',description='Sort wordlists by custom search terms')
     parser.add_argument('-min','--min-length',type=int,default=3,dest='min_length')
     parser.add_argument('-max','--max-length',type=int,default=9,dest='max_length')
     parser.add_argument('-in','--input',type=str,default=INPUT,dest='input')
     parser.add_argument('-out','--output',type=str,default=OUTPUT,dest='output')
+    parser.add_argument('-c','--convert',default=False,action='store_true',dest='convert')
     args = parser.parse_args()
 
     input_file = open(args.input,'rb')
@@ -42,6 +49,8 @@ if __name__ == '__main__':
     try:
         while 1:
             line = input_file.readline()
+            if (args.convert):
+                line = convert(line)
             if check(line,min_length=args.min_length,max_length=args.max_length):
                 output_file.write(line)
             p = input_file.tell()

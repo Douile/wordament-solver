@@ -10,3 +10,6 @@ wordament.wasm
 
 # Tools
 emsdk-cache/
+
+# Other
+.ignore/
