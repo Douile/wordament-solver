@@ -302,7 +302,7 @@ window.addEventListener('click', function(e) {
   for (let className of e.target.classList) {
     switch(className) {
       case 'scroll-to-bottom':
-      window.scrollTo({left: 0, top: window.scrollMaxY, behavior: 'smooth'});
+      window.scrollTo({left: 0, top: document.querySelector('.about').scrollHeight, behavior: 'smooth'});
       return;
     }
   }
