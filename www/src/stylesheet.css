@@ -15,29 +15,24 @@
   grid-gap: 10px;
 }
 
-.input-box input, .input-submit {
+.input-box input {
   --shadow: var(--fg);
   --scale: 1;
   border: 0;
   border-radius: 5px;
+  color: var(--bg);
   background-color: var(--hl);
   font-size: 24pt;
   font-weight: bolder;
   text-align: center;
   text-transform: uppercase;
+  width: 100%;
   box-shadow: 2px 2px 0px 0px var(--shadow);
   transition: background-color .5s ease, transform .5s ease, box-shadow .5s ease, border-radius .5s ease;
 }
 
-.input-box input {
-  width: 100%;
-}
 
-.input-submit {
-  cursor: pointer;
-}
-
-.input-box input:hover, .input-box input:focus, .input-box input:active, .input-submit:hover {
+.input-box input:hover, .input-box input:focus, .input-box input:active {
   --scale: 0.95;
   box-shadow: 0px 0px 0px 0px var(--shadow);
   transform: scale(var(--scale));
