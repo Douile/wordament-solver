@@ -168,6 +168,8 @@ body {
   --bg-hl: #3a3e3c;
   --fg: #ffffff;
   --hl: #ffc000;
+  --ga-background: var(--fg);
+  --ga-foreground: var(--bg);
   font-family: arial;
   color: var(--fg);
   box-sizing: border-box;
