@@ -296,9 +296,21 @@ window.addEventListener('input', function(e) {
 window.addEventListener('click', function(e) {
   const stack = e.target.parentNode.getAttribute('data-stack')
   if (stack !== null) {
-    displayStack.display(stack).then(null, console.warn);
+    return displayStack.display(stack).then(null, console.warn);
+  }
+
+  for (let className of e.target.classList) {
+    switch(className) {
+      case 'scroll-to-bottom':
+      window.scrollTo({left: 0, top: window.scrollMaxY, behavior: 'smooth'});
+      return;
+    }
   }
 })
+
+window.addEventListener('scroll', function(e) {
+  document.body.classList[window.scrollY <= 20 ? 'add' : 'remove']('scroll-at-top');
+}, { passive: true })
 
 /*******************************************************************************
 *** Init

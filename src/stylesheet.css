@@ -96,8 +96,32 @@
   transform: translateY(0px);
 }
 
-body {
-  position: fixed;
+button.scroll-to-bottom {
+  position: absolute;
+  left: 50%;
+  bottom: 15px;
+  margin: 0;
+  margin-left: -20px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 100%;
+  background-color: var(--hl);
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.scroll-at-top button.scroll-to-bottom {
+  opacity: 1;
+}
+
+.scroll-to-bottom, svg.scroll-to-bottom > * {
+  cursor: pointer;
+  color: var(--bg);
+}
+
+.app {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -112,8 +136,31 @@ body {
   overflow-y: auto;
 }
 
-body > * {
+.app > * {
   margin: 0px 10px 0px 10px;
+}
+
+.about {
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row wrap;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg) var(--fg);
 }
 
 :root {
@@ -126,5 +173,7 @@ body > * {
   --bg-hl: #3a3e3c;
   --fg: #ffffff;
   --hl: #ffc000;
+  font-family: arial;
+  color: var(--fg);
   box-sizing: border-box;
 }
