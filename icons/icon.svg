@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 516 516"
+   height="516"
+   width="516">
+  <defs
+     id="defs2">
+    <rect
+       id="rect953"
+       height="84.966674"
+       width="202.84321"
+       y="60.620889"
+       x="-155.35146" />
+  </defs>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1">
+    <g
+       style="fill:#000000"
+       id="g106">
+      <path
+         points="104.75078,398.8728 187.44548,371.3079 187.44548,47.602345 104.75078,75.167244 "
+         d="M 104.75078,75.167244 V 398.8728 l 82.6947,-27.5649 V 47.602345 Z"
+         style="fill:#353564;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         id="path108" />
+      <path
+         points="339.24803,477.03879 421.94273,449.47389 187.44548,371.3079 104.75078,398.8728 "
+         d="m 104.75078,398.8728 234.49725,78.16599 82.6947,-27.5649 -234.49725,-78.16599 z"
+         style="fill:#afafde;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         id="path116" />
+      <path
+         points="421.94273,125.76833 421.94273,449.47389 187.44548,371.3079 187.44548,47.602345 "
+         d="M 187.44548,47.602345 421.94273,125.76833 V 449.47389 L 187.44548,371.3079 Z"
+         style="fill:#e9e9ff;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         id="path118" />
+      <path
+         points="339.24803,153.33323 421.94273,125.76833 187.44548,47.602345 104.75078,75.167244 "
+         d="m 104.75078,75.167244 234.49725,78.165986 82.6947,-27.5649 -234.49725,-78.165985 z"
+         style="fill:#cfa000;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         id="path110" />
+      <path
+         points="339.24803,477.03879 421.94273,449.47389 421.94273,125.76833 339.24803,153.33323 "
+         d="m 339.24803,153.33323 v 323.70556 l 82.6947,-27.5649 V 125.76833 Z"
+         style="fill:#dfb000;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         id="path114" />
+      <path
+         points="339.24803,153.33323 339.24803,477.03879 104.75078,398.8728 104.75078,75.167244 "
+         d="M 104.75078,75.167244 339.24803,153.33323 V 477.03879 L 104.75078,398.8728 Z"
+         style="fill:#ffc000;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         id="path112" />
+    </g>
+  </g>
+  <g
+     id="layer2">
+    <text
+       transform="rotate(18)"
+       id="text960"
+       y="246.11041"
+       x="170.69676"
+       style="font-weight:bold;font-size:150px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Bold';letter-spacing:0px;word-spacing:0px;fill:#1a1f1f;fill-opacity:1;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;"
+       xml:space="preserve"><tspan
+         y="246.11041"
+         x="170.69676"
+         id="tspan958">WS</tspan></text>
+  </g>
+</svg>
