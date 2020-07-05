@@ -1,0 +1,2 @@
+Allow: /
+Sitemap: https://wordament.tomhipwell.codes/sitemap.xml
