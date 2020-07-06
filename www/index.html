@@ -43,11 +43,11 @@
 <body class="scroll-at-top">
 <section class="app">
   <div class="input-wrapper">
-    <section class="input-box">
-      <input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16">
-      <input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16">
-      <input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16">
-      <input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16"><input type="text" maxlength="16">
+    <section class="input-box" aria-label="Tile inputs: numbered 1 is top left, 16 is bottom right and 13 is bottom left">
+      <input type="text" maxlength="16" aria-label="Tile 1 input"><input type="text" maxlength="16" aria-label="Tile 2 input"><input type="text" maxlength="16" aria-label="Tile 3 input"><input type="text" maxlength="16" aria-label="Tile 4 input">
+      <input type="text" maxlength="16" aria-label="Tile 5 input"><input type="text" maxlength="16" aria-label="Tile 6 input"><input type="text" maxlength="16" aria-label="Tile 7 input"><input type="text" maxlength="16" aria-label="Tile 8 input">
+      <input type="text" maxlength="16" aria-label="Tile 9 input"><input type="text" maxlength="16" aria-label="Tile 10 input"><input type="text" maxlength="16" aria-label="Tile 11 input"><input type="text" maxlength="16" aria-label="Tile 12 input">
+      <input type="text" maxlength="16" aria-label="Tile 13 input"><input type="text" maxlength="16" aria-label="Tile 14 input"><input type="text" maxlength="16" aria-label="Tile 15 input"><input type="text" maxlength="16" aria-label="Tile 16 input">
     </section>
   </div>
   <section class="output-wrapper"><table class="output-box"></table></section>
@@ -68,21 +68,21 @@
     <h3>A word shown isn't correct / a correct word isn't shown</h3>
     <p>The wordlist currently being used is all words of length 3 to 16 from the Collins 2012 scrabble dictionary, I am working on getting the official wordament wordlist.</p>
     <h3>The page isn't working</h3>
-    <p>This page uses WASM which may not be supported in some older browsers (<a href="https://caniuse.com/#feat=wasm" target="_blank">You can check support here</a>) ideally you should use the latest version of firefox or chrome. Otherwise bugs can be reported <a href="https://github.com/Douile/wordament-solver/issues/new?assignees=Douile&labels=bug&template=bug_report.md&title=%5BBUG%5D" target="_blank">here</a>.</p>
+    <p>This page uses WASM which may not be supported in some older browsers (<a href="https://caniuse.com/#feat=wasm" target="_blank" rel="noreferrer">You can check support here</a>) ideally you should use the latest version of firefox or chrome. Otherwise <a href="https://github.com/Douile/wordament-solver/issues/new?assignees=Douile&labels=bug&template=bug_report.md&title=%5BBUG%5D" target="_blank" rel="noopener">report a bug</a>.</p>
     <h2>Planned features</h2>
     <ul>
       <li>Add support for multi string tiles (e.g A/B): currently only the first option is used</li>
       <li>Improve the wordlist, ideally get the official wordament wordlist</li>
       <li>Improve point calculations</li>
     </ul>
-    <p>Feature you want not here? Suggest new ones <a href="https://github.com/Douile/wordament-solver/issues/new?assignees=Douile&labels=enhancement&template=feature_request.md&title=%5BFEATURE%5D+" target="_blank">here</a> (Github account required)</p>
+    <p>Feature you want not here? <a href="https://github.com/Douile/wordament-solver/issues/new?assignees=Douile&labels=enhancement&template=feature_request.md&title=%5BFEATURE%5D+" target="_blank" rel="noopener">Suggest a new one</a> (Github account required)</p>
     <h2>Dependencies</h2>
     <ul>
-      <li>Thanks to <a href="https://feathericons.com/" target="_blank">feather icons</a> for the arrow icon</li>
+      <li>Thanks to <a href="https://feathericons.com/" target="_blank" rel="noreferrer">feather icons</a> for the arrow icon</li>
     </ul>
   </section>
 </section>
-<button class="scroll-to-bottom" arial-label="Scroll down"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="scroll-to-bottom"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></button>
+<button class="scroll-to-bottom" arial-label="Scroll down" aria-label="Scroll to bottom of page"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="scroll-to-bottom"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></button>
 <dialog class="loading" open="">Loading wordlist...</dialog>
 </body>
 </html>
