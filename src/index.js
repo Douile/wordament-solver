@@ -349,7 +349,7 @@ function loadHash() {
 }
 
 async function init() {
-  const res = await fetch('./assets/wordlist.txt', { mode: 'same-origin', credentials: 'omit' });
+  const res = await fetch('./assets/wordlist.txt');
   const text = await res.text();
   console.log('Wordlist downloaded...');
   await Wordament.initialized.wait();
