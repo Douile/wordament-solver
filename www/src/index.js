@@ -304,6 +304,12 @@ window.addEventListener('click', function(e) {
       case 'scroll-to-bottom':
       window.scrollTo({left: 0, top: document.querySelector('.about').scrollHeight, behavior: 'smooth'});
       return;
+      case 'reset-board':
+      clearBoard();
+      return;
+      case 'random-board':
+      randomiseBoard();
+      return;
     }
   }
 })
@@ -340,12 +346,32 @@ function loadHash() {
     } catch(e) {
       return console.error(e);
     }
-    const size = board.length;
-    for (let i=0;i<size;i++) {
-      const el = document.querySelector(`.input-box > input:nth-child(${i+1})`);
-      if (el !== null) el.value = board[i];
-    }
+    loadBoard(board);
   }
+}
+
+/** Replace the board values
+ * @param {string[]} board List of board values top to bottom left to right
+*/
+function loadBoard(board) {
+  const size = board.length;
+  for (let i=0;i<size;i++) {
+    const el = document.querySelector(`.input-box > input:nth-child(${i+1})`);
+    if (el !== null) el.value = board[i];
+  }
+}
+
+function clearBoard() {
+  loadBoard(Array(16).fill(''));
+  document.querySelector('.output-box').innerHTML = '';
+}
+
+function randomiseBoard() {
+  loadBoard(Array(16).fill('').map(() => {
+    const letter = 97 + Math.floor(Math.random() * 26);
+    return String.fromCharCode(letter);
+  }));
+  solveCurrentBoard();
 }
 
 async function init() {
