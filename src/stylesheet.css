@@ -91,12 +91,20 @@
   transform: translateY(0px);
 }
 
-button.scroll-to-bottom {
+section.button-bar {
   position: absolute;
-  left: 50%;
   bottom: 15px;
-  margin: 0;
-  margin-left: -20px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+section.button-bar > div {
+  display: flex;
+}
+
+section.button-bar button {
   width: 40px;
   height: 40px;
   border: 0;
@@ -104,13 +112,14 @@ button.scroll-to-bottom {
   background-color: var(--hl);
   opacity: 0;
   transition: opacity .5s ease;
+  margin: 0 5px;
 }
 
-.scroll-at-top button.scroll-to-bottom {
+.scroll-at-top section.button-bar button {
   opacity: 1;
 }
 
-.scroll-to-bottom, svg.scroll-to-bottom > * {
+section.button-bar button, svg.icons * {
   cursor: pointer;
   color: var(--bg);
 }
